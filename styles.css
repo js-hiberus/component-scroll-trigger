@@ -1,0 +1,133 @@
+/* ===== RESET Y CONFIGURACIÓN BASE ===== */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body { 
+  background: #796060; 
+  font-family: sans-serif; 
+  overflow-x: hidden; 
+  color: white; 
+}
+
+html, body { 
+  height: 100%; 
+}
+
+/* ===== ZONA DE SCROLL ===== */
+/* Esta zona invisible de 10000px de altura activa las animaciones al hacer scroll */
+.scroll-zone {
+  height: 10000px;
+}
+
+/* ===== CONTENEDOR PRINCIPAL DE LA PIRÁMIDE ===== */
+/* Contenedor fijo que ocupa toda la pantalla donde aparecen las cartas */
+.piramide-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* No interfiere con el scroll */
+}
+
+/* ===== ESTILOS DE LAS CARTAS ===== */
+/* Estilo base de cada carta/cuadro */
+.cuadro {
+  position: absolute;
+  width: 100px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.1);
+  transform: scale(0.5); /* Empieza pequeña */
+  opacity: 0; /* Empieza invisible */
+  transition: all 0.5s ease-out;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Efecto cuando la carta se muestra */
+.cuadro.mostrar .info {
+  bottom: -25px;
+  opacity: 1;
+}
+
+/* ===== CARTA PRINCIPAL (NARANJA) ===== */
+/* La carta principal del centro, siempre visible */
+.cuadro.head {
+  width: 120px;
+  height: 180px;
+  background-color: #ffa500; /* Color naranja */
+  z-index: 50; /* Siempre al frente */
+  border: 2px solid #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1); /* Centrada y tamaño completo */
+  opacity: 1 !important; /* Siempre visible */
+  pointer-events: auto; /* Se puede hacer clic */
+}
+
+/* ===== ESTILOS DE DEBUG ===== */
+/* Para identificar elementos específicos durante desarrollo */
+.cuadro.debug {
+  border: 2px solid #ff0000;
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.cuadro.primera-fila {
+  border: 2px solid #00ff00;
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+/* ===== MODAL DE INFORMACIÓN ===== */
+/* Ventana que aparece al hacer clic en una carta */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  display: none; /* Oculto por defecto */
+  z-index: 10000; /* Por encima de todo */
+  color: #fff;
+  max-width: 300px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ===== MONITOR DE RENDIMIENTO ===== */
+/* Información en tiempo real (esquina superior derecha) */
+.monitor {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 9999;
+  font-family: monospace;
+}
