@@ -2,7 +2,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
 // Configuración principal
-const total = 50; // Total de cartas a mostrar
+const total = 21; // Total de cartas a mostrar (ajustado al número de imágenes disponibles)
 const piramide = document.getElementById("piramide");
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
@@ -11,38 +11,54 @@ const centerX = window.innerWidth / 2;
 const centerY = window.innerHeight / 2;
 let cuadrosVisibles = 0;
 
-// ===== CONFIGURACIÓN DE LA ESTRUCTURA PIRAMIDAL =====
+// ===== MAPEO DE IMÁGENES =====
 /**
- * Define cómo se organizan las cartas en filas:
- * - fila: número de fila (para referencia)
- * - elementos: cuántas cartas van en esta fila
- * - offsetY: distancia vertical desde el centro (negativo = hacia arriba)
- * - zIndex: profundidad visual (mayor = más al frente)
+ * Imágenes locales de la carpeta PERSONAJES PRESENTACION
+ * Cada posición corresponde al número de cuadro (0 = cuadro 1, 1 = cuadro 2, etc.)
  */
-const piramideConfig = [
-  { fila: 1, elementos: 2, offsetY: -60, zIndex: 45 },   // Fila 1: elementos 2,3
-  { fila: 2, elementos: 4, offsetY: -140, zIndex: 40 },  // Fila 2: elementos 4,5,6,7
-  { fila: 3, elementos: 6, offsetY: -220, zIndex: 35 },  // Fila 3: elementos 8-13
-  { fila: 4, elementos: 8, offsetY: -300, zIndex: 30 },  // Fila 4: elementos 14-21
-  { fila: 5, elementos: 10, offsetY: -380, zIndex: 25 }, // Fila 5: elementos 22-31
-  { fila: 6, elementos: 12, offsetY: -460, zIndex: 20 }, // Fila 6: elementos 32-43
-  { fila: 7, elementos: 7, offsetY: -540, zIndex: 15 }   // Fila 7: elementos 44-50
+const imagenesPersonas = [
+  'PERSONAJES PRESENTACION/Sin ti╠ütulo-4.png',      // Cuadro 1 (principal)
+  'PERSONAJES PRESENTACION/Sin ti╠ütulo-41.png',     // Cuadro 2
+  'PERSONAJES PRESENTACION/Sin ti╠ütulo-422.png',    // Cuadro 3
+  'PERSONAJES PRESENTACION/Sin ti╠ütulo-4222.png',   // Cuadro 4
+  'PERSONAJES PRESENTACION/Sin ti╠ütulo-42222.png',  // Cuadro 5
+  'PERSONAJES PRESENTACION/0263935d-60a4-4588-a8c0-2e5c53f39246.png',
+  'PERSONAJES PRESENTACION/05fe8d8a-f40c-466a-9eea-de67882e8462.png',
+  'PERSONAJES PRESENTACION/06758c23-507d-4e2a-b7d1-533a5398cd28.png',
+  'PERSONAJES PRESENTACION/10a655fe-2aef-445e-8efd-39463fbab1fe.png',
+  'PERSONAJES PRESENTACION/1ac87812-7157-4770-b3df-1c7bcd634660.png',
+  'PERSONAJES PRESENTACION/1d61c3b9-d995-4505-8503-d9cd43fee078.png',
+  'PERSONAJES PRESENTACION/2f22cab5-4c85-46b9-ba3c-a218d7e30d03.png',
+  'PERSONAJES PRESENTACION/3647a5f1-7c43-4f49-b93f-fd814c750c2f.png',
+  'PERSONAJES PRESENTACION/3ad98faa-5620-48ae-9d5c-fc57a704d283-1.png',
+  'PERSONAJES PRESENTACION/56e4554d-262a-46d1-b055-12f4507b360e.png',
+  'PERSONAJES PRESENTACION/5ac2ad31-5805-4845-a673-f4425fe1a528.png',
+  'PERSONAJES PRESENTACION/981c1a0e-4572-462e-b816-ceef827c46f3.png',
+  'PERSONAJES PRESENTACION/a6dead66-a24a-4bc3-ac05-16e287c81cee-1.png',
+  'PERSONAJES PRESENTACION/a896d580-11b9-4584-a33a-f3ded7b7469b.png',
+  'PERSONAJES PRESENTACION/aabc9875-424e-452f-a2d3-8886ac9a6c6f.png',
+  'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png'
 ];
 
-const posicionesUsadas = []; // Array para controlar posiciones ocupadas
+// ===== CONFIGURACIÓN DE LA ESTRUCTURA PIRAMIDAL =====
+const piramideConfig = [
+  { fila: 1, elementos: 4, offsetY: -200, zIndex: 35 },  // Fila 1: por encima de la línea roja
+  { fila: 2, elementos: 6, offsetY: -280, zIndex: 30 },  // Fila 2: más arriba
+  { fila: 3, elementos: 8, offsetY: -360, zIndex: 25 },  // Fila 3: aún más arriba 
+  { fila: 4, elementos: 2, offsetY: -440, zIndex: 20 }   // Fila 4: al fondo superior
+];
+
+const posicionesUsadas = [];
 
 // ===== FUNCIONES DE POSICIONAMIENTO =====
 
 /**
  * Determina en qué fila va un elemento específico
- * @param {number} indice - Índice del elemento (0-48, sin contar el elemento principal)
- * @returns {object} - {fila: número de fila, posicionEnFila: posición dentro de esa fila}
  */
 function obtenerFilaYPosicion(indice) {
   let elementoActual = indice;
   let filaIndex = 0;
   
-  // Buscar en qué fila encaja este elemento
   for (let i = 0; i < piramideConfig.length; i++) {
     if (elementoActual < piramideConfig[i].elementos) {
       filaIndex = i;
@@ -56,59 +72,70 @@ function obtenerFilaYPosicion(indice) {
 
 /**
  * Calcula la posición exacta (x,y) de un elemento
- * @param {number} indice - Índice del elemento
- * @returns {object} - {left, top, fila, zIndex}
  */
 function encontrarPosicion(indice) {
   const { fila, posicionEnFila } = obtenerFilaYPosicion(indice);
   const config = piramideConfig[fila] || piramideConfig[piramideConfig.length - 1];
   
-  // Calcular espaciado horizontal
   const elementosEnFila = config.elementos;
-  const maxAnchoDisponible = window.innerWidth * 0.95;
-  let espacioEntreElementos = Math.min(180, maxAnchoDisponible / (elementosEnFila + 1));
+  const maxAnchoDisponible = window.innerWidth * 0.98; // Usar más ancho disponible
+  let espacioEntreElementos = Math.min(300, maxAnchoDisponible / (elementosEnFila + 1)); // Ajustado para nueva distribución
   
-  // Espaciado especial para la primera fila (elementos 2 y 3)
+  // Ajustar espaciado según la fila - llenar espacios vacíos
   if (fila === 0) {
-    espacioEntreElementos = Math.max(200, espacioEntreElementos);
+    // Primera fila: 4 elementos bien distribuidos
+    espacioEntreElementos = Math.max(280, espacioEntreElementos);
+  } else if (fila === 1) {
+    // Segunda fila: 6 elementos ocupando más espacio
+    espacioEntreElementos = Math.max(250, espacioEntreElementos);
+  } else if (fila === 2) {
+    // Tercera fila: 8 elementos llenando los espacios intermedios
+    espacioEntreElementos = Math.min(220, Math.max(180, espacioEntreElementos * 0.85));
+  } else if (fila === 3) {
+    // Cuarta fila: 2 elementos al fondo bien separados
+    espacioEntreElementos = Math.max(400, espacioEntreElementos);
   }
   
-  // Factor de expansión para filas grandes
-  const factorExpansion = elementosEnFila > 8 ? 1.3 : 1.1;
+  // Factor de expansión optimizado para nueva distribución
+  const factorExpansion = fila === 3 ? 1.5 : (fila >= 1 ? 1.2 : 1.3);
   const espacioFinal = espacioEntreElementos * factorExpansion;
-  
   const anchoTotalFila = (elementosEnFila - 1) * espacioFinal;
   
-  // Posición X centrada
   const inicioX = centerX - (anchoTotalFila / 2);
   const left = inicioX + (posicionEnFila * espacioFinal);
-  
-  // Posición Y según configuración de fila
   const top = centerY + config.offsetY;
   
-  // Separación lateral adicional para primera fila
   let finalLeft = left;
+  
+  // Ajustes especiales por fila
   if (fila === 0) {
-    const separacionExtra = 80;
-    if (posicionEnFila === 0) {
-      finalLeft = left - separacionExtra; // Elemento 2 más a la izquierda
+    // Primera fila: distribución uniforme alrededor del centro
+    const separacionExtra = 50;
+    if (posicionEnFila <= 1) {
+      finalLeft = left - separacionExtra;
     } else {
-      finalLeft = left + separacionExtra; // Elemento 3 más a la derecha
+      finalLeft = left + separacionExtra;
+    }
+  } else if (fila === 3) {
+    // Última fila: elementos muy separados
+    const separacionExtra = 200;
+    if (posicionEnFila === 0) {
+      finalLeft = left - separacionExtra;
+    } else {
+      finalLeft = left + separacionExtra;
     }
   }
   
-  // Pequeña variación aleatoria para naturalidad
-  const variacionX = (Math.random() - 0.5) * 5;
-  const variacionY = (Math.random() - 0.5) * 5;
+  // Variación reducida para mejor alineación
+  const variacionX = fila >= 2 ? (Math.random() - 0.5) * 4 : (Math.random() - 0.5) * 6;
+  const variacionY = fila >= 2 ? (Math.random() - 0.5) * 4 : (Math.random() - 0.5) * 6;
   
   finalLeft += variacionX;
   const finalTop = top + variacionY;
   
-  // Verificar límites de pantalla
-  const leftSeguro = Math.max(60, Math.min(window.innerWidth - 160, finalLeft));
-  const topSeguro = Math.max(30, Math.min(window.innerHeight - 200, finalTop));
+  const leftSeguro = Math.max(120, Math.min(window.innerWidth - 320, finalLeft));
+  const topSeguro = Math.max(20, Math.min(window.innerHeight - 500, finalTop)); // Ajustado para imágenes más arriba
   
-  // Guardar posición
   posicionesUsadas.push({ 
     left: leftSeguro, 
     top: topSeguro, 
@@ -133,41 +160,54 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// ===== FUNCIÓN PRINCIPAL DE CREACIÓN DE CARTAS =====
+// ===== FUNCIÓN PRINCIPAL DE CREACIÓN DE CARTAS CON IMÁGENES =====
 
 /**
- * Crea una carta individual con su posición y animación
- * @param {number} i - Índice de la carta (0 = carta principal)
+ * Crea una carta individual con imagen y animación
  */
 function crearCuadro(i) {
   const div = document.createElement("div");
   div.classList.add("cuadro");
-  div.textContent = i + 1;
 
   // Carta principal (elemento 1)
   if (i === 0) {
     div.classList.add("head");
+    
+    // Crear estructura HTML para imagen principal - SIN efectos de tarjeta
+    div.innerHTML = `
+      <img src="${encodeURI(imagenesPersonas[i])}" alt="Persona Principal" loading="eager">
+    `;
+    
     piramide.appendChild(div);
     return;
   }
 
   // Cartas de la pirámide (elementos 2-50)
   const { left, top, fila, zIndex } = encontrarPosicion(i - 1);
-  const escala = Math.max(0.65, 1 - fila * 0.06); // Escala decreciente con la distancia
-  const opacidad = Math.max(0.7, 1 - fila * 0.05); // Opacidad decreciente con la distancia
+  const escala = Math.max(0.65, 1 - fila * 0.06);
+  const opacidad = Math.max(0.7, 1 - fila * 0.05);
 
   // Aplicar posición y z-index
   div.style.left = `${left}px`;
   div.style.top = `${top}px`;
   div.style.zIndex = zIndex;
   
-  // Debug visual para elementos específicos
+  // Crear estructura HTML SOLO con imagen - SIN overlay ni efectos de tarjeta
+  div.innerHTML = `
+    <img src="${encodeURI(imagenesPersonas[i] || imagenesPersonas[0])}" 
+         alt="Persona ${i + 1}" 
+         loading="lazy"
+         style="width: 100%; height: 100%; object-fit: contain; object-position: center; display: block;"
+         onerror="console.log('Error cargando imagen ${i + 1}'); this.style.display='none'; this.parentElement.style.background='rgba(255,255,255,0.1)'; this.parentElement.innerHTML='<span style=\\'color:white; font-size:12px; text-align:center; display:flex; align-items:center; justify-content:center; height:100%\\'>Imagen ${i + 1}</span>';">
+  `;
+  
+  // Debug visual para elementos específicos - COMENTADO para evitar cuadrados verdes
+  /*
   if (i >= 2 && i <= 3) {
     div.classList.add("primera-fila");
     console.log(`🟢 Elemento ${i + 1} (Primera fila) - Fila: ${fila + 1} - Posición: (${left.toFixed(1)}, ${top.toFixed(1)})`);
-  } else if (i >= 4 && i <= 7) {
-    console.log(`Elemento ${i + 1} - Fila: ${fila + 1} - Posición: (${left.toFixed(1)}, ${top.toFixed(1)})`);
   }
+  */
 
   // ===== EVENTO DE CLIC =====
   div.addEventListener("click", () => {
@@ -186,7 +226,6 @@ function crearCuadro(i) {
   // ===== CONFIGURACIÓN DE ANIMACIÓN =====
   gsap.set(div, { opacity: 0, scale: 0.5 });
 
-  // Timing de aparición basado en la posición del elemento
   const delayGrupo = i < 4 ? i * 100 : i < 15 ? 500 + (i - 4) * 30 : 1000 + (i - 15) * 10;
 
   gsap.to(div, {
@@ -264,13 +303,12 @@ requestAnimationFrame(trackFPS);
 
 /**
  * Función para mostrar la estructura completa de la pirámide en consola
- * Uso: Abrir consola del navegador y escribir: mostrarEstructuraPiramide()
  */
 window.mostrarEstructuraPiramide = () => {
   console.log("🏗️ ESTRUCTURA DE LA PIRÁMIDE:");
   console.log("=" .repeat(50));
   
-  let elementoActual = 1; // Empezamos desde el elemento 1 (después del head)
+  let elementoActual = 1;
   
   piramideConfig.forEach((config, filaIndex) => {
     const elementos = [];
@@ -285,7 +323,69 @@ window.mostrarEstructuraPiramide = () => {
   console.log(`Total elementos (sin contar head): ${elementoActual - 1}`);
 };
 
+// ===== FUNCIÓN PARA CAMBIAR IMÁGENES DINÁMICAMENTE =====
+
+/**
+ * Función para actualizar una imagen específica
+ * Uso: cambiarImagen(numeroDeElemento, 'nueva-url-imagen.jpg')
+ */
+window.cambiarImagen = (numeroElemento, nuevaURL) => {
+  if (numeroElemento < 1 || numeroElemento > total) {
+    console.error(`Elemento ${numeroElemento} no existe. Debe estar entre 1 y ${total}`);
+    return;
+  }
+  
+  // Actualizar en el array
+  imagenesPersonas[numeroElemento - 1] = nuevaURL;
+  
+  // Actualizar en el DOM si ya existe
+  const elementos = document.querySelectorAll('.cuadro');
+  if (elementos[numeroElemento - 1]) {
+    const img = elementos[numeroElemento - 1].querySelector('img');
+    if (img) {
+      img.src = nuevaURL;
+      console.log(`✅ Imagen del elemento ${numeroElemento} actualizada`);
+    }
+  }
+};
+
 // Ejecutar automáticamente para debug
 setTimeout(() => {
   window.mostrarEstructuraPiramide();
+  console.log("✅ Usando imágenes de la carpeta PERSONAJES PRESENTACION");
+  console.log(`📁 ${imagenesPersonas.length} imágenes disponibles`);
+  console.log(`🎯 Total elementos configurados: ${total}`);
+  console.log(`📊 Distribución: 1 principal + ${total-1} en pirámide = ${total} total`);
+  console.log("💡 Para cambiar una imagen específica, ejecuta: cambiarImagen(numero, 'ruta-imagen.jpg')");
+  
+  // Verificar que las imágenes se puedan cargar
+  verificarImagenes();
+  
+  // Mostrar conteo de elementos visibles después de un momento
+  setTimeout(() => {
+    const elementosEnDOM = document.querySelectorAll('.cuadro').length;
+    console.log(`🧱 Elementos creados en DOM: ${elementosEnDOM}`);
+    console.log(`📈 Elementos visibles actualmente: ${cuadrosVisibles}`);
+  }, 2000);
 }, 1000);
+
+// ===== VERIFICACIÓN DE IMÁGENES =====
+/**
+ * Función para verificar si las imágenes existen y pueden cargarse
+ */
+function verificarImagenes() {
+  console.log("🔍 Verificando carga de imágenes...");
+  
+  imagenesPersonas.forEach((ruta, index) => {
+    const img = new Image();
+    const rutaCodificada = encodeURI(ruta);
+    img.onload = () => {
+      console.log(`✅ Imagen ${index + 1} cargada: ${ruta}`);
+    };
+    img.onerror = () => {
+      console.error(`❌ Error cargando imagen ${index + 1}: ${ruta}`);
+      console.error(`   Ruta codificada: ${rutaCodificada}`);
+    };
+    img.src = rutaCodificada;
+  });
+}
