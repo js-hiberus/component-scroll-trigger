@@ -4,48 +4,203 @@ gsap.registerPlugin(ScrollTrigger);
 // Configuración principal
 const total = 21; // Total de cartas a mostrar (ajustado al número de imágenes disponibles)
 const piramide = document.getElementById("piramide");
-const modal = document.getElementById("modal");
-const modalContent = document.getElementById("modal-content");
 const monitor = document.getElementById("monitor");
 const centerX = window.innerWidth / 2;
 const centerY = window.innerHeight / 2;
 let cuadrosVisibles = 0;
 
-// ===== MAPEO DE IMÁGENES =====
-/**
- * Imágenes locales de la carpeta PERSONAJES PRESENTACION
- * Cada posición corresponde al número de cuadro (0 = cuadro 1, 1 = cuadro 2, etc.)
- */
-const imagenesPersonas = [
-  'PERSONAJES PRESENTACION/Sin ti╠ütulo-4.png',      // Cuadro 1 (principal)
-  'PERSONAJES PRESENTACION/Sin ti╠ütulo-41.png',     // Cuadro 2
-  'PERSONAJES PRESENTACION/Sin ti╠ütulo-422.png',    // Cuadro 3
-  'PERSONAJES PRESENTACION/Sin ti╠ütulo-4222.png',   // Cuadro 4
-  'PERSONAJES PRESENTACION/Sin ti╠ütulo-42222.png',  // Cuadro 5
-  'PERSONAJES PRESENTACION/0263935d-60a4-4588-a8c0-2e5c53f39246.png',
-  'PERSONAJES PRESENTACION/05fe8d8a-f40c-466a-9eea-de67882e8462.png',
-  'PERSONAJES PRESENTACION/06758c23-507d-4e2a-b7d1-533a5398cd28.png',
-  'PERSONAJES PRESENTACION/10a655fe-2aef-445e-8efd-39463fbab1fe.png',
-  'PERSONAJES PRESENTACION/1ac87812-7157-4770-b3df-1c7bcd634660.png',
-  'PERSONAJES PRESENTACION/1d61c3b9-d995-4505-8503-d9cd43fee078.png',
-  'PERSONAJES PRESENTACION/2f22cab5-4c85-46b9-ba3c-a218d7e30d03.png',
-  'PERSONAJES PRESENTACION/3647a5f1-7c43-4f49-b93f-fd814c750c2f.png',
-  'PERSONAJES PRESENTACION/3ad98faa-5620-48ae-9d5c-fc57a704d283-1.png',
-  'PERSONAJES PRESENTACION/56e4554d-262a-46d1-b055-12f4507b360e.png',
-  'PERSONAJES PRESENTACION/5ac2ad31-5805-4845-a673-f4425fe1a528.png',
-  'PERSONAJES PRESENTACION/981c1a0e-4572-462e-b816-ceef827c46f3.png',
-  'PERSONAJES PRESENTACION/a6dead66-a24a-4bc3-ac05-16e287c81cee-1.png',
-  'PERSONAJES PRESENTACION/a896d580-11b9-4584-a33a-f3ded7b7469b.png',
-  'PERSONAJES PRESENTACION/aabc9875-424e-452f-a2d3-8886ac9a6c6f.png',
-  'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png'
+// ===== ESTRUCTURA UNIFICADA: PERSONAJES CON IMÁGENES Y BOCADILLOS =====
+const personajes = [
+  // Personaje principal (índice 0) - Marcos Perez
+  {
+    imagen: 'PERSONAJES PRESENTACION/a6dead66-a24a-4bc3-ac05-16e287c81cee-1.png',
+    nombre: "Marcos Perez",
+    edad: "56 años", 
+    lugar: "Zargoza",
+    bocadilloX: -250, 
+    bocadilloY: -40
+  },
+  // Segunda imagen (índice 1) - Miguel Fernández Castro
+  {
+    imagen: 'PERSONAJES PRESENTACION/1d61c3b9-d995-4505-8503-d9cd43fee078.png',
+    nombre: "Miguel Fernández Castro",
+    edad: "18 años", 
+    lugar: "Soria",
+    bocadilloX: 180,
+    bocadilloY: -80
+  },
+  // Tercera imagen (índice 2) - Manuela Velázquez
+  {
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4.png',
+    nombre: "Manuela Velázquez",
+    edad: "21 años", 
+    lugar: "Madrid",
+    bocadilloX: 160,
+  },
+  // Cuarta imagen (índice 3) - Marcos Fernández Castro
+  {
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-41.png',
+    nombre: "Marcos Fernández Castro",
+    edad: "34 años", 
+    lugar: "Soria",
+    bocadilloX: -220,
+    bocadilloY: -60
+  },
+  // Quinta imagen (índice 4) - Miguel Solís
+  {
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-422.png',
+    nombre: "Miguel Solís",
+    edad: "54 años", 
+    lugar: "Madrid",
+    bocadilloX: 170,
+    bocadilloY: 140
+  },
+  // Sexta imagen (índice 5) - Federico Saenz Bilaró
+  {
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4222.png',
+    nombre: "Federico Saenz Bilaró",
+    edad: "56 años", 
+    lugar: "Vigo",
+    bocadilloX: 190,
+    bocadilloY: -20
+  },
+  // Séptima imagen (índice 6) - Luis Perez
+  {
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-42222.png',
+    nombre: "Luis Perez",
+    edad: "16 años", 
+    lugar: "Cudillero",
+    bocadilloX: -180,
+    bocadilloY: 110
+  },
+  // Octava imagen (índice 7) - Oscar Vilezario
+  {
+    imagen: 'PERSONAJES PRESENTACION/0263935d-60a4-4588-a8c0-2e5c53f39246.png',
+    nombre: "Oscar Vilezario",
+    edad: "65 años", 
+    lugar: "Lugo",
+    bocadilloX: -190,
+    bocadilloY: 80
+  },
+  // Novena imagen (índice 8) - Fernando y Marcos Rodríguez
+  {
+    imagen: 'PERSONAJES PRESENTACION/05fe8d8a-f40c-466a-9eea-de67882e8462.png',
+    nombre: "Fernando y Marcos Rodríguez",
+    edad: "36 y 48 años", 
+    lugar: "Hondarribia",
+    bocadilloX: 200,
+    bocadilloY: 100
+  },
+  // Décima imagen (índice 9) - Pedro Verne
+  {
+    imagen: 'PERSONAJES PRESENTACION/06758c23-507d-4e2a-b7d1-533a5398cd28.png',
+    nombre: "Pedro Verne",
+    edad: "43 años", 
+    lugar: "Bilbao",
+    bocadilloX: -200,
+    bocadilloY: -30
+  },
+  // Undécima imagen (índice 10) - Santiago Velázquez
+  {
+    imagen: 'PERSONAJES PRESENTACION/10a655fe-2aef-445e-8efd-39463fbab1fe.png',
+    nombre: "Santiago Velázquez",
+    edad: "19 años", 
+    lugar: "Pontevedra",
+    bocadilloX: 150,
+    bocadilloY: -100
+  },
+  // Duodécima imagen (índice 11) - Oscar Velizario y Josefa Marquez
+  {
+    imagen: 'PERSONAJES PRESENTACION/1ac87812-7157-4770-b3df-1c7bcd634660.png',
+    nombre: "Oscar Velizario y Josefa Marquez",
+    edad: "65 y 61 años", 
+    lugar: "Lugo",
+    bocadilloX: 210,
+    bocadilloY: 70
+  },
+  // Decimotercera imagen (índice 12) - María, Victor y Dolores Huergo Carmona
+  {
+    imagen: 'PERSONAJES PRESENTACION/2f22cab5-4c85-46b9-ba3c-a218d7e30d03.png',
+    nombre: "María, Victor y Dolores Huergo Carmona",
+    edad: "63, 23 y 35 años", 
+    lugar: "Aragón",
+    bocadilloX: -230,
+    bocadilloY: 130
+  },
+  // Decimocuarta imagen (índice 13) - Pedro, Marcos y Felipa Sanchez Viel
+  {
+    imagen: 'PERSONAJES PRESENTACION/3647a5f1-7c43-4f49-b93f-fd814c750c2f.png',
+    nombre: "Pedro, Marcos y Felipa Sanchez Viel",
+    edad: "45, 61 y 51 años", 
+    lugar: "Zamora",
+    bocadilloX: 180,
+    bocadilloY: -110
+  },
+  // Imágenes adicionales sin información de personaje (por si hay más imágenes)
+  {
+    imagen: 'PERSONAJES PRESENTACION/3ad98faa-5620-48ae-9d5c-fc57a704d283-1.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/56e4554d-262a-46d1-b055-12f4507b360e.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/5ac2ad31-5805-4845-a673-f4425fe1a528.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/981c1a0e-4572-462e-b816-ceef827c46f3.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/a896d580-11b9-4584-a33a-f3ded7b7469b.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/aabc9875-424e-452f-a2d3-8886ac9a6c6f.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  },
+  {
+    imagen: 'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png',
+    nombre: null,
+    edad: null,
+    lugar: null,
+    bocadilloX: 0,
+    bocadilloY: 0
+  }
 ];
 
 // ===== CONFIGURACIÓN DE LA ESTRUCTURA PIRAMIDAL =====
 const piramideConfig = [
-  { fila: 1, elementos: 4, offsetY: -200, zIndex: 35 },  // Fila 1: por encima de la línea roja
-  { fila: 2, elementos: 6, offsetY: -280, zIndex: 30 },  // Fila 2: más arriba
-  { fila: 3, elementos: 8, offsetY: -360, zIndex: 25 },  // Fila 3: aún más arriba 
-  { fila: 4, elementos: 2, offsetY: -440, zIndex: 20 }   // Fila 4: al fondo superior
+  { fila: 1, elementos: 4, offsetY: -200, zIndex: 35 },
+  { fila: 2, elementos: 6, offsetY: -280, zIndex: 30 },
+  { fila: 3, elementos: 8, offsetY: -360, zIndex: 25 },
+  { fila: 4, elementos: 2, offsetY: -440, zIndex: 20 }
 ];
 
 const posicionesUsadas = [];
@@ -78,8 +233,8 @@ function encontrarPosicion(indice) {
   const config = piramideConfig[fila] || piramideConfig[piramideConfig.length - 1];
   
   const elementosEnFila = config.elementos;
-  const maxAnchoDisponible = window.innerWidth * 0.98; // Usar más ancho disponible
-  let espacioEntreElementos = Math.min(300, maxAnchoDisponible / (elementosEnFila + 1)); // Ajustado para nueva distribución
+  const maxAnchoDisponible = window.innerWidth * 0.98;
+  let espacioEntreElementos = Math.min(300, maxAnchoDisponible / (elementosEnFila + 1));
   
   // Ajustar espaciado según la fila - llenar espacios vacíos
   if (fila === 0) {
@@ -160,7 +315,121 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// ===== FUNCIÓN PRINCIPAL DE CREACIÓN DE CARTAS CON IMÁGENES =====
+// ===== SISTEMA DE BOCADILLOS INTERCAMBIABLES =====
+
+// Array para almacenar todos los bocadillos creados
+const bocadillosCreados = [];
+let bocadilloActual = null;
+
+/**
+ * Crea un bocadillo de información para un personaje específico
+ * @param {number} indicePersonaje - Índice del personaje en personajes
+ * @returns {HTMLElement} - Elemento DOM del bocadillo
+ */
+function crearBocadillo(indicePersonaje) {
+  const personaje = personajes[indicePersonaje];
+  if (!personaje || !personaje.nombre) {
+    // Si no hay información del personaje, no crear bocadillo
+    return null;
+  }
+  
+  const bocadillo = document.createElement("div");
+  bocadillo.classList.add("info-bocadillo");
+  bocadillo.id = `bocadillo-${indicePersonaje}`;
+  
+  // Obtener la posición real de la imagen correspondiente desde el DOM
+  let posicionImagen = { left: centerX, top: centerY };
+  
+  if (indicePersonaje === 0) {
+    // Imagen principal - buscar elemento con clase 'head'
+    const imagenPrincipal = document.querySelector('.cuadro.head');
+    if (imagenPrincipal) {
+      const rect = imagenPrincipal.getBoundingClientRect();
+      posicionImagen = { 
+        left: rect.left + rect.width / 2, 
+        top: rect.top + rect.height / 2 
+      };
+    }
+  } else {
+    // Buscar la imagen correspondiente en la pirámide
+    const todasLasImagenes = document.querySelectorAll('.cuadro:not(.head)');
+    const imagenObjetivo = todasLasImagenes[indicePersonaje - 1]; // -1 porque empezamos desde índice 1
+    
+    if (imagenObjetivo) {
+      const rect = imagenObjetivo.getBoundingClientRect();
+      posicionImagen = { 
+        left: rect.left + rect.width / 2, 
+        top: rect.top + rect.height / 2 
+      };
+    }
+  }
+  
+  // Usar directamente las coordenadas del bocadillo (ya están optimizadas)
+  let offsetX = personaje.bocadilloX;
+  let offsetY = personaje.bocadilloY;
+  
+  // Ajustar posición final del bocadillo
+  bocadillo.style.left = `${posicionImagen.left + offsetX}px`;
+  bocadillo.style.top = `${posicionImagen.top + offsetY}px`;
+  bocadillo.style.zIndex = "200";
+  
+  // Contenido del bocadillo
+  bocadillo.innerHTML = `
+    <div class="bocadillo-content">
+      <strong>${personaje.nombre}</strong><br>
+      ${personaje.edad}, ${personaje.lugar}
+    </div>
+  `;
+  
+  // Inicialmente invisible
+  gsap.set(bocadillo, { opacity: 0, scale: 0.8 });
+  
+  return bocadillo;
+}
+
+/**
+ * Muestra un bocadillo específico y oculta el actual
+ * @param {number} indicePersonaje - Índice del personaje a mostrar
+ */
+function mostrarBocadillo(indicePersonaje) {
+  // ELIMINAR TODOS los bocadillos existentes del DOM
+  document.querySelectorAll('.info-bocadillo').forEach(bocadillo => {
+    bocadillo.remove();
+  });
+  
+  // Limpiar arrays
+  bocadillosCreados.length = 0;
+  bocadilloActual = null;
+  
+  // Crear SOLO el bocadillo que necesitamos
+  const nuevoBocadillo = crearBocadillo(indicePersonaje);
+  if (nuevoBocadillo) {
+    piramide.appendChild(nuevoBocadillo);
+    bocadilloActual = nuevoBocadillo;
+    
+    // Mostrarlo inmediatamente
+    gsap.to(nuevoBocadillo, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.4,
+      ease: "power2.out"
+    });
+  }
+}
+
+/**
+ * Oculta todos los bocadillos
+ */
+function ocultarTodosBocadillos() {
+  // ELIMINAR TODOS los bocadillos del DOM
+  document.querySelectorAll('.info-bocadillo').forEach(bocadillo => {
+    bocadillo.remove();
+  });
+  
+  // Limpiar variables
+  bocadillosCreados.length = 0;
+  bocadilloActual = null;
+}
 
 /**
  * Crea una carta individual con imagen y animación
@@ -175,8 +444,29 @@ function crearCuadro(i) {
     
     // Crear estructura HTML para imagen principal - SIN efectos de tarjeta
     div.innerHTML = `
-      <img src="${encodeURI(imagenesPersonas[i])}" alt="Persona Principal" loading="eager">
+      <img src="${encodeURI(personajes[i].imagen)}" alt="Persona Principal" loading="eager">
     `;
+    
+    // Configurar el trigger de scroll para mostrar el primer bocadillo
+    gsap.set(div, { opacity: 0 }); // Inicialmente invisible
+    
+    ScrollTrigger.create({
+      trigger: ".scroll-zone",
+      start: "top top",
+      end: "top+=100 top",
+      onEnter: () => {
+        // Aparición instantánea de golpe del personaje principal
+        gsap.set(div, { opacity: 1 });
+        // Mostrar bocadillo del primer personaje
+        setTimeout(() => mostrarBocadillo(0), 200);
+      },
+      onLeaveBack: () => {
+        // Desaparición instantánea de golpe
+        gsap.set(div, { opacity: 0 });
+        // Ocultar todos los bocadillos al hacer scroll hacia atrás
+        ocultarTodosBocadillos();
+      }
+    });
     
     piramide.appendChild(div);
     return;
@@ -194,65 +484,59 @@ function crearCuadro(i) {
   
   // Crear estructura HTML SOLO con imagen - SIN overlay ni efectos de tarjeta
   div.innerHTML = `
-    <img src="${encodeURI(imagenesPersonas[i] || imagenesPersonas[0])}" 
+    <img src="${encodeURI(personajes[i].imagen || personajes[0].imagen)}" 
          alt="Persona ${i + 1}" 
          loading="lazy"
          style="width: 100%; height: 100%; object-fit: contain; object-position: center; display: block;"
          onerror="console.log('Error cargando imagen ${i + 1}'); this.style.display='none'; this.parentElement.style.background='rgba(255,255,255,0.1)'; this.parentElement.innerHTML='<span style=\\'color:white; font-size:12px; text-align:center; display:flex; align-items:center; justify-content:center; height:100%\\'>Imagen ${i + 1}</span>';">
   `;
-  
-  // Debug visual para elementos específicos - COMENTADO para evitar cuadrados verdes
-  /*
-  if (i >= 2 && i <= 3) {
-    div.classList.add("primera-fila");
-    console.log(`🟢 Elemento ${i + 1} (Primera fila) - Fila: ${fila + 1} - Posición: (${left.toFixed(1)}, ${top.toFixed(1)})`);
-  }
-  */
 
-  // ===== EVENTO DE CLIC =====
-  div.addEventListener("click", () => {
-    modal.style.display = "block";
-    modalContent.innerHTML = `
-      <strong>ID:</strong> ${i + 1}<br>
-      <strong>Fila:</strong> ${fila + 1}<br>
-      <strong>Posición en fila:</strong> ${obtenerFilaYPosicion(i - 1).posicionEnFila + 1}<br>
-      <strong>Coordenadas:</strong> (${left.toFixed(0)}, ${top.toFixed(0)})<br>
-      <strong>Escala:</strong> ${escala.toFixed(2)}<br>
-      <strong>Z-Index:</strong> ${zIndex}<br>
-      <strong>Distancia del centro:</strong> ${Math.hypot(left - centerX, top - centerY).toFixed(0)}px
-    `;
-  });
+  // ===== EVENTO DE CLIC ELIMINADO =====
+  // Modal de debug eliminado para mejor experiencia de usuario
 
   // ===== CONFIGURACIÓN DE ANIMACIÓN =====
-  gsap.set(div, { opacity: 0, scale: 0.5 });
+  gsap.set(div, { opacity: 0 }); // Solo opacidad, sin escala
 
-  const delayGrupo = i < 4 ? i * 100 : i < 15 ? 500 + (i - 4) * 30 : 1000 + (i - 15) * 10;
+  // Aumentar el tiempo entre apariciones para efecto más dramático
+  const delayGrupo = i < 4 ? i * 300 : i < 15 ? 1200 + (i - 4) * 200 : 3400 + (i - 15) * 150;
 
-  gsap.to(div, {
-    scrollTrigger: {
-      trigger: ".scroll-zone",
-      start: `top+=${delayGrupo} top`,
-      end: `top+=${delayGrupo + 100} top`,
-      scrub: true,
-      toggleActions: "play reverse play reverse",
-      onEnter: () => {
-        div.classList.add("mostrar");
-        cuadrosVisibles++;
-      },
-      onLeaveBack: () => {
-        div.classList.remove("mostrar");
-        cuadrosVisibles--;
+  ScrollTrigger.create({
+    trigger: ".scroll-zone",
+    start: `top+=${delayGrupo} top`,
+    end: `top+=${delayGrupo + 50} top`,
+    onEnter: () => {
+      div.classList.add("mostrar");
+      cuadrosVisibles++;
+      
+      // Aparición instantánea de golpe
+      gsap.set(div, { 
+        opacity: opacidad,
+        scale: escala
+      });
+      
+      // Sistema de bocadillos intercambiables - UNO A LA VEZ
+      if (i >= 1 && i <= 13) {
+        mostrarBocadillo(i);
       }
     },
-    opacity: opacidad,
-    scale: escala,
-    duration: 0.5,
-    ease: "power2.out"
+    onLeaveBack: () => {
+      div.classList.remove("mostrar");
+      cuadrosVisibles--;
+      
+      // Desaparición instantánea de golpe
+      gsap.set(div, { opacity: 0 });
+      
+      // Al hacer scroll hacia atrás, mostrar el bocadillo anterior
+      if (i >= 1 && i <= 13) {
+        // Si salimos de una imagen, mostrar el bocadillo del personaje anterior
+        const personajeAnterior = Math.max(0, i - 1);
+        mostrarBocadillo(personajeAnterior);
+      }
+    }
   });
 
   piramide.appendChild(div);
 }
-
 // ===== CREACIÓN PROGRESIVA DE ELEMENTOS =====
 let i = 0;
 function crearCuadrosProgresivamente(deadline) {
@@ -336,7 +620,7 @@ window.cambiarImagen = (numeroElemento, nuevaURL) => {
   }
   
   // Actualizar en el array
-  imagenesPersonas[numeroElemento - 1] = nuevaURL;
+  personajes[numeroElemento - 1].imagen = nuevaURL;
   
   // Actualizar en el DOM si ya existe
   const elementos = document.querySelectorAll('.cuadro');
@@ -353,7 +637,7 @@ window.cambiarImagen = (numeroElemento, nuevaURL) => {
 setTimeout(() => {
   window.mostrarEstructuraPiramide();
   console.log("✅ Usando imágenes de la carpeta PERSONAJES PRESENTACION");
-  console.log(`📁 ${imagenesPersonas.length} imágenes disponibles`);
+  console.log(`📁 ${personajes.length} imágenes disponibles`);
   console.log(`🎯 Total elementos configurados: ${total}`);
   console.log(`📊 Distribución: 1 principal + ${total-1} en pirámide = ${total} total`);
   console.log("💡 Para cambiar una imagen específica, ejecuta: cambiarImagen(numero, 'ruta-imagen.jpg')");
@@ -376,14 +660,14 @@ setTimeout(() => {
 function verificarImagenes() {
   console.log("🔍 Verificando carga de imágenes...");
   
-  imagenesPersonas.forEach((ruta, index) => {
+  personajes.forEach((personaje, index) => {
     const img = new Image();
-    const rutaCodificada = encodeURI(ruta);
+    const rutaCodificada = encodeURI(personaje.imagen);
     img.onload = () => {
-      console.log(`✅ Imagen ${index + 1} cargada: ${ruta}`);
+      console.log(`✅ Imagen ${index + 1} cargada: ${personaje.imagen}`);
     };
     img.onerror = () => {
-      console.error(`❌ Error cargando imagen ${index + 1}: ${ruta}`);
+      console.error(`❌ Error cargando imagen ${index + 1}: ${personaje.imagen}`);
       console.error(`   Ruta codificada: ${rutaCodificada}`);
     };
     img.src = rutaCodificada;
