@@ -64,7 +64,7 @@ html, body {
 }
 
 /* ===== CARTA PRINCIPAL (SIN EFECTOS DE CUADRADO) ===== */
-/* La carta principal del centro, siempre visible */
+/* La carta principal del centro - aparece con animación como los demás */
 .cuadro.head {
   width: 280px;
   height: 420px;
@@ -72,7 +72,7 @@ html, body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
-  opacity: 1 !important;
+  opacity: 0;
   pointer-events: auto;
 }
 
@@ -104,111 +104,233 @@ html, body {
   font-size: 12px;
   padding: 8px 12px;
   border-radius: 6px;
-  z-index: 9999;
+  z-index: 9000;
   font-family: monospace;
 }
 
-/* ===== SISTEMA DE BOCADILLOS INTERCAMBIABLES ===== */
-/* Estilos base para todos los bocadillos de información de personajes */
-.info-bocadillo {
-  position: absolute;
-  background: transparent;
-  font-family: 'Arial', sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 18px;
-  line-height: 1.3;
-  pointer-events: none;
-  z-index: 200;
+/* ===== PERSONAJE ESPECIAL (PROTECCIÓN CONTRA CORTINA) ===== */
+/* El personaje especial tiene posición y tamaño específicos (mucho más grande) */
+.cuadro.personaje-especial {
+  width: 477px;
+  height: 1832px;
+  z-index: 8000;
   opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease-out;
-  text-align: left;
-  max-width: 300px;
+  pointer-events: auto;
+  border: none;
+  background: transparent;
+  position: fixed;
+  left: 1232px;
 }
 
-.info-bocadillo .bocadillo-content {
-  text-align: left;
-}
-
-.info-bocadillo .bocadillo-content strong {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
+.cuadro.personaje-especial img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   display: block;
-  margin-bottom: 4px;
-  font-weight: normal;
 }
 
-/* Flecha SVG común para todos los bocadillos */
-.bocadillo-arrow-svg {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
-  text-align: center;
+/* ===== AJUSTES RESPONSIVOS PARA PERSONAJE ESPECIAL ===== */
+@media (max-width: 1400px) {
+  .cuadro.personaje-especial {
+    left: calc(100vw - 432px);
+  }
 }
 
-.bocadillo-arrow-svg img {
-  width: 30px;
-  height: 30px;
+@media (max-width: 1200px) {
+  .cuadro.personaje-especial {
+    width: 220px;
+    height: 850px;
+    left: calc(100vw - 320px);
+  }
+}
+
+@media (max-width: 768px) {
+  .cuadro.personaje-especial {
+    width: 180px;
+    height: 680px;
+    left: calc(100vw - 250px);
+  }
+}
+
+/* ===== NUEVA SECCIÓN: ESCENA DE MULTITUD ===== */
+/* Contenedor principal de la escena */
+.escena-multitud {
+  position: relative;
+  z-index: 1;
+}
+
+/* REGLA ESPECÍFICA: El personaje especial siempre tiene prioridad sobre efectos de multitud */
+body .cuadro.personaje-especial {
+  z-index: 8000;
+  position: fixed;
+}
+
+body .cuadro.personaje-especial.mostrar {
+  z-index: 8001;
+  opacity: 1;
+  filter: none;
+  mask: none;
+  -webkit-mask: none;
+  backdrop-filter: none;
+  transform: none;
+}
+
+.panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #796060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenedor de la multitud con efecto de máscara */
+.multitud {
+  --wipe: 0%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  max-width: 60%;
+  mask-image: linear-gradient(to top, transparent var(--wipe), #000 calc(var(--wipe) + 15%), #000 100%);
+  -webkit-mask-image: linear-gradient(to top, transparent var(--wipe), #000 calc(var(--wipe) + 15%), #000 100%);
+  transition: filter 0.3s ease;
+}
+
+/* Imágenes individuales dentro de la multitud */
+.multitud img {
+  width: 120px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
   opacity: 0.8;
-  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
 }
 
-/* ===== ESTILOS ESPECÍFICOS POR BOCADILLO ===== */
-/* Personaje principal (índice 0) - usando OBJECTS.svg */
-#bocadillo-0 .bocadillo-arrow-svg {
-  left: 70%;
+/* Protección específica para el personaje especial cuando está visible */
+.cuadro.personaje-especial.mostrar {
+  opacity: 1;
+  filter: none;
+  mask: none;
+  -webkit-mask: none;
+  z-index: 8001;
+  position: fixed;
 }
 
-/* Personajes con Vector.svg - posiciones de flecha específicas */
-#bocadillo-1 .bocadillo-arrow-svg,
-#bocadillo-2 .bocadillo-arrow-svg,
-#bocadillo-5 .bocadillo-arrow-svg,
-#bocadillo-8 .bocadillo-arrow-svg,
-#bocadillo-11 .bocadillo-arrow-svg,
-#bocadillo-13 .bocadillo-arrow-svg {
-  left: 30%; /* Flechas a la izquierda para personajes del lado derecho */
-}
-
-#bocadillo-3 .bocadillo-arrow-svg,
-#bocadillo-6 .bocadillo-arrow-svg,
-#bocadillo-7 .bocadillo-arrow-svg,
-#bocadillo-9 .bocadillo-arrow-svg,
-#bocadillo-12 .bocadillo-arrow-svg {
-  left: 70%; /* Flechas a la derecha para personajes del lado izquierdo */
-}
-
-#bocadillo-4 .bocadillo-arrow-svg,
-#bocadillo-10 .bocadillo-arrow-svg {
-  left: 50%; /* Flechas centradas para algunos personajes */
-}
-
-/* Rotaciones específicas para algunas flechas */
-#bocadillo-1 .bocadillo-arrow-svg img,
-#bocadillo-2 .bocadillo-arrow-svg img,
-#bocadillo-5 .bocadillo-arrow-svg img {
-  transform: rotate(45deg);
-}
-
-#bocadillo-3 .bocadillo-arrow-svg img,
-#bocadillo-7 .bocadillo-arrow-svg img,
-#bocadillo-9 .bocadillo-arrow-svg img {
-  transform: rotate(-45deg);
-}
-
-/* ===== COMPATIBILIDAD CON CLASE ANTERIOR ===== */
-.info-bocadillo-principal {
-  position: absolute;
+/* Espaciadores para control de scroll */
+.espacio-a {
+  height: 150vh;
   background: transparent;
-  font-family: 'Arial', sans-serif;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 18px;
-  line-height: 1.3;
+}
+
+.espacio-b {
+  height: 150vh;
+  background: transparent;
+}
+
+/* Protección del personaje especial y sus elementos hijos cuando está visible */
+.cuadro.personaje-especial.mostrar {
+  opacity: 1;
+  filter: none;
+  mask: none;
+  -webkit-mask: none;
+  backdrop-filter: none;
+  mix-blend-mode: normal;
+}
+
+.cuadro.personaje-especial.mostrar * {
+  filter: none;
+  mask: none;
+  -webkit-mask: none;
+}
+
+/* Accesibilidad: Reducir animaciones si está configurado */
+@media (prefers-reduced-motion: reduce) {
+  .multitud {
+    mask-image: none;
+    -webkit-mask-image: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .multitud.reduced-motion {
+    opacity: 0;
+    filter: none;
+  }
+}
+
+/* Responsive para la escena de multitud */
+@media (max-width: 1200px) {
+  .multitud {
+    max-width: 70%;
+    gap: 15px;
+    padding: 30px;
+  }
+  
+  .multitud img {
+    width: 100px;
+    height: 150px;
+  }
+  
+  .retrato-fijo {
+    right: 40px;
+    width: 240px;
+    height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .multitud {
+    max-width: 50%;
+    gap: 10px;
+    padding: 20px;
+  }
+  
+  .multitud img {
+    width: 80px;
+    height: 120px;
+  }
+  
+  .retrato-fijo {
+    right: 20px;
+    width: 200px;
+    height: 300px;
+  }
+}
+
+/* ===== CONTENEDOR RETRATO-FIJO ===== */
+/* Contenedor específico para el personaje especial, aislado del efecto cortina */
+.retrato-fijo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  z-index: 200;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease-out;
-  text-align: left;
+  z-index: 8000;
+  /* Asegurar que esté completamente aislado del efecto cortina */
+  isolation: isolate;
+  contain: layout style;
+}
+
+/* El personaje especial dentro del retrato-fijo mantiene su posicionamiento */
+.retrato-fijo .cuadro.personaje-especial {
+  pointer-events: auto;
+  /* Protección total contra efectos de cortina */
+  mask: none;
+  -webkit-mask: none;
+  mask-image: none;
+  -webkit-mask-image: none;
+  filter: none;
+  --wipe: 0%;
+}
+
+/* Solo cuando el personaje especial tiene la clase 'mostrar' debe ser visible */
+body .retrato-fijo .cuadro.personaje-especial.mostrar {
+  opacity: 1;
 }

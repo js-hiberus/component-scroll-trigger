@@ -9,302 +9,180 @@ const centerX = window.innerWidth / 2;
 const centerY = window.innerHeight / 2;
 let cuadrosVisibles = 0;
 
+// ===== CONFIGURACIÓN DE FASES DEL SCROLL =====
+let faseActual = 1; // 1 = Primera fase (pirámide), 2 = Segunda fase (nuevo personaje)
+let personajeEspecialCreado = false;
+
 // ===== ESTRUCTURA UNIFICADA: PERSONAJES CON IMÁGENES Y BOCADILLOS =====
 const personajes = [
-  // Personaje principal (índice 0) - Marcos Perez
+  // Personaje principal (ahora actúa como los demás)
   {
-    imagen: 'PERSONAJES PRESENTACION/a6dead66-a24a-4bc3-ac05-16e287c81cee-1.png',
-    nombre: "Marcos Perez",
-    edad: "56 años", 
-    lugar: "Zargoza",
-    bocadilloX: -250, 
-    bocadilloY: -40
-  },
-  // Segunda imagen (índice 1) - Miguel Fernández Castro
-  {
-    imagen: 'PERSONAJES PRESENTACION/1d61c3b9-d995-4505-8503-d9cd43fee078.png',
-    nombre: "Miguel Fernández Castro",
-    edad: "18 años", 
-    lugar: "Soria",
-    bocadilloX: 180,
-    bocadilloY: -80
-  },
-  // Tercera imagen (índice 2) - Manuela Velázquez
-  {
-    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4.png',
-    nombre: "Manuela Velázquez",
-    edad: "21 años", 
-    lugar: "Madrid",
-    bocadilloX: 160,
-  },
-  // Cuarta imagen (índice 3) - Marcos Fernández Castro
-  {
-    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-41.png',
-    nombre: "Marcos Fernández Castro",
-    edad: "34 años", 
-    lugar: "Soria",
-    bocadilloX: -220,
-    bocadilloY: -60
-  },
-  // Quinta imagen (índice 4) - Miguel Solís
-  {
-    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-422.png',
-    nombre: "Miguel Solís",
-    edad: "54 años", 
-    lugar: "Madrid",
-    bocadilloX: 170,
-    bocadilloY: 140
-  },
-  // Sexta imagen (índice 5) - Federico Saenz Bilaró
-  {
-    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4222.png',
-    nombre: "Federico Saenz Bilaró",
-    edad: "56 años", 
-    lugar: "Vigo",
-    bocadilloX: 190,
-    bocadilloY: -20
-  },
-  // Séptima imagen (índice 6) - Luis Perez
-  {
-    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-42222.png',
-    nombre: "Luis Perez",
-    edad: "16 años", 
-    lugar: "Cudillero",
-    bocadilloX: -180,
-    bocadilloY: 110
-  },
-  // Octava imagen (índice 7) - Oscar Vilezario
-  {
-    imagen: 'PERSONAJES PRESENTACION/0263935d-60a4-4588-a8c0-2e5c53f39246.png',
-    nombre: "Oscar Vilezario",
-    edad: "65 años", 
-    lugar: "Lugo",
-    bocadilloX: -190,
-    bocadilloY: 80
-  },
-  // Novena imagen (índice 8) - Fernando y Marcos Rodríguez
-  {
-    imagen: 'PERSONAJES PRESENTACION/05fe8d8a-f40c-466a-9eea-de67882e8462.png',
-    nombre: "Fernando y Marcos Rodríguez",
-    edad: "36 y 48 años", 
-    lugar: "Hondarribia",
-    bocadilloX: 200,
-    bocadilloY: 100
-  },
-  // Décima imagen (índice 9) - Pedro Verne
-  {
-    imagen: 'PERSONAJES PRESENTACION/06758c23-507d-4e2a-b7d1-533a5398cd28.png',
-    nombre: "Pedro Verne",
-    edad: "43 años", 
-    lugar: "Bilbao",
-    bocadilloX: -200,
-    bocadilloY: -30
-  },
-  // Undécima imagen (índice 10) - Santiago Velázquez
-  {
-    imagen: 'PERSONAJES PRESENTACION/10a655fe-2aef-445e-8efd-39463fbab1fe.png',
-    nombre: "Santiago Velázquez",
-    edad: "19 años", 
-    lugar: "Pontevedra",
-    bocadilloX: 150,
-    bocadilloY: -100
-  },
-  // Duodécima imagen (índice 11) - Oscar Velizario y Josefa Marquez
-  {
-    imagen: 'PERSONAJES PRESENTACION/1ac87812-7157-4770-b3df-1c7bcd634660.png',
-    nombre: "Oscar Velizario y Josefa Marquez",
-    edad: "65 y 61 años", 
-    lugar: "Lugo",
-    bocadilloX: 210,
-    bocadilloY: 70
-  },
-  // Decimotercera imagen (índice 12) - María, Victor y Dolores Huergo Carmona
-  {
-    imagen: 'PERSONAJES PRESENTACION/2f22cab5-4c85-46b9-ba3c-a218d7e30d03.png',
-    nombre: "María, Victor y Dolores Huergo Carmona",
-    edad: "63, 23 y 35 años", 
-    lugar: "Aragón",
-    bocadilloX: -230,
-    bocadilloY: 130
-  },
-  // Decimocuarta imagen (índice 13) - Pedro, Marcos y Felipa Sanchez Viel
-  {
-    imagen: 'PERSONAJES PRESENTACION/3647a5f1-7c43-4f49-b93f-fd814c750c2f.png',
-    nombre: "Pedro, Marcos y Felipa Sanchez Viel",
-    edad: "45, 61 y 51 años", 
-    lugar: "Zamora",
-    bocadilloX: 180,
-    bocadilloY: -110
-  },
-  // Imágenes adicionales sin información de personaje (por si hay más imágenes)
-  {
-    imagen: 'PERSONAJES PRESENTACION/3ad98faa-5620-48ae-9d5c-fc57a704d283-1.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-1',
+    imagen: 'PERSONAJES PRESENTACION/a6dead66-a24a-4bc3-ac05-16e287c81cee-1.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/56e4554d-262a-46d1-b055-12f4507b360e.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-2', 
+    imagen: 'PERSONAJES PRESENTACION/1d61c3b9-d995-4505-8503-d9cd43fee078.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/5ac2ad31-5805-4845-a673-f4425fe1a528.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-3',
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/981c1a0e-4572-462e-b816-ceef827c46f3.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-4',
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-41.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/a896d580-11b9-4584-a33a-f3ded7b7469b.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-5',
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-422.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/aabc9875-424e-452f-a2d3-8886ac9a6c6f.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-6',
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-4222.png'
   },
   {
-    imagen: 'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png',
-    nombre: null,
-    edad: null,
-    lugar: null,
-    bocadilloX: 0,
-    bocadilloY: 0
+    id: 'personaje-7',
+    imagen: 'PERSONAJES PRESENTACION/Sin ti╠ütulo-42222.png'
+  },
+  {
+    id: 'personaje-8',
+    imagen: 'PERSONAJES PRESENTACION/0263935d-60a4-4588-a8c0-2e5c53f39246.png'
+  },
+  {
+    id: 'personaje-9',
+    imagen: 'PERSONAJES PRESENTACION/05fe8d8a-f40c-466a-9eea-de67882e8462.png'
+  },
+  {
+    id: 'personaje-10',
+    imagen: 'PERSONAJES PRESENTACION/06758c23-507d-4e2a-b7d1-533a5398cd28.png'
+  },
+  {
+    id: 'personaje-11',
+    imagen: 'PERSONAJES PRESENTACION/10a655fe-2aef-445e-8efd-39463fbab1fe.png'
+  },
+  {
+    id: 'personaje-12',
+    imagen: 'PERSONAJES PRESENTACION/1ac87812-7157-4770-b3df-1c7bcd634660.png'
+  },
+  {
+    id: 'personaje-13',
+    imagen: 'PERSONAJES PRESENTACION/2f22cab5-4c85-46b9-ba3c-a218d7e30d03.png'
+  },
+  {
+    id: 'personaje-14',
+    imagen: 'PERSONAJES PRESENTACION/3647a5f1-7c43-4f49-b93f-fd814c750c2f.png'
+  },
+  {
+    id: 'personaje-15',
+    imagen: 'PERSONAJES PRESENTACION/3ad98faa-5620-48ae-9d5c-fc57a704d283-1.png'
+  },
+  {
+    id: 'personaje-16',
+    imagen: 'PERSONAJES PRESENTACION/56e4554d-262a-46d1-b055-12f4507b360e.png'
+  },
+  {
+    id: 'personaje-17',
+    imagen: 'PERSONAJES PRESENTACION/5ac2ad31-5805-4845-a673-f4425fe1a528.png'
+  },
+  {
+    id: 'personaje-18',
+    imagen: 'PERSONAJES PRESENTACION/981c1a0e-4572-462e-b816-ceef827c46f3.png'
+  },
+  {
+    id: 'personaje-19',
+    imagen: 'PERSONAJES PRESENTACION/a896d580-11b9-4584-a33a-f3ded7b7469b.png'
+  },
+  {
+    id: 'personaje-20',
+    imagen: 'PERSONAJES PRESENTACION/aabc9875-424e-452f-a2d3-8886ac9a6c6f.png'
+  },
+  {
+    id: 'personaje-21',
+    imagen: 'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png'
   }
 ];
 
-// ===== CONFIGURACIÓN DE LA ESTRUCTURA PIRAMIDAL =====
-const piramideConfig = [
-  { fila: 1, elementos: 4, offsetY: -200, zIndex: 35 },
-  { fila: 2, elementos: 6, offsetY: -280, zIndex: 30 },
-  { fila: 3, elementos: 8, offsetY: -360, zIndex: 25 },
-  { fila: 4, elementos: 2, offsetY: -440, zIndex: 20 }
+// ===== CONFIGURACIÓN DEL PERSONAJE ESPECIAL SEGUNDA FASE =====
+const personajeEspecial = {
+  id: 'marcos-sanchez-viel',
+  imagen: 'PERSONAJES PRESENTACION/d5b91333-ec05-45bc-94ee-b71e436502fe.png',
+  posicion: {
+    left: 1232,
+    top: centerY - 509,
+    width: 265,
+    height: 1018
+  }
+};
+
+// ===== CONFIGURACIÓN DE DISPOSICIÓN EXACTA SEGÚN IMAGEN =====
+// Definimos manualmente la estructura de filas y posiciones
+const disposicionManual = [
+  // Primeros 3 personajes (índices 0, 1, 2)
+  { fila: 0, posicion: 0, escala: 1.0, offsetY: 80, zIndex: 100 },
+  { fila: 1, posicion: 1, escala: 0.92, offsetY: 30, zIndex: 90 },
+  { fila: 1, posicion: 0, escala: 0.92, offsetY: 30, zIndex: 90 },
+  // Segunda fila (5 personajes)
+  { fila: 2, posicion: 0, escala: 0.82, offsetY: -30, zIndex: 80 },
+  { fila: 2, posicion: 1, escala: 0.82, offsetY: -30, zIndex: 80 },
+  { fila: 2, posicion: 2, escala: 0.82, offsetY: -30, zIndex: 80 },
+  { fila: 2, posicion: 3, escala: 0.82, offsetY: -30, zIndex: 80 },
+  { fila: 2, posicion: 4, escala: 0.82, offsetY: -30, zIndex: 80 },
+  // Tercera fila (5 personajes)
+  { fila: 3, posicion: 0, escala: 0.7, offsetY: -90, zIndex: 70 },
+  { fila: 3, posicion: 1, escala: 0.7, offsetY: -90, zIndex: 70 },
+  { fila: 3, posicion: 2, escala: 0.7, offsetY: -90, zIndex: 70 },
+  { fila: 3, posicion: 3, escala: 0.7, offsetY: -90, zIndex: 70 },
+  { fila: 3, posicion: 4, escala: 0.7, offsetY: -90, zIndex: 70 },
+  // Cuarta fila (6 personajes)
+  { fila: 4, posicion: 0, escala: 0.6, offsetY: -150, zIndex: 60 },
+  { fila: 4, posicion: 1, escala: 0.6, offsetY: -150, zIndex: 60 },
+  { fila: 4, posicion: 2, escala: 0.6, offsetY: -150, zIndex: 60 },
+  { fila: 4, posicion: 3, escala: 0.6, offsetY: -150, zIndex: 60 },
+  { fila: 4, posicion: 4, escala: 0.6, offsetY: -150, zIndex: 60 },
+  { fila: 4, posicion: 5, escala: 0.6, offsetY: -150, zIndex: 60 }
 ];
 
-const posicionesUsadas = [];
-
-// ===== FUNCIONES DE POSICIONAMIENTO =====
-
-/**
- * Determina en qué fila va un elemento específico
- */
-function obtenerFilaYPosicion(indice) {
-  let elementoActual = indice;
-  let filaIndex = 0;
-  
-  for (let i = 0; i < piramideConfig.length; i++) {
-    if (elementoActual < piramideConfig[i].elementos) {
-      filaIndex = i;
+function encontrarPosicion(indice) {
+  const totalFilas = [1, 2, 5, 5, 6];
+  let fila = 0;
+  let posEnFila = indice;
+  for (let f = 0; f < totalFilas.length; f++) {
+    if (posEnFila < totalFilas[f]) {
+      fila = f;
       break;
     }
-    elementoActual -= piramideConfig[i].elementos;
+    posEnFila -= totalFilas[f];
   }
   
-  return { fila: filaIndex, posicionEnFila: elementoActual };
-}
-
-/**
- * Calcula la posición exacta (x,y) de un elemento
- */
-function encontrarPosicion(indice) {
-  const { fila, posicionEnFila } = obtenerFilaYPosicion(indice);
-  const config = piramideConfig[fila] || piramideConfig[piramideConfig.length - 1];
+  // Si hay una disposición manual definida para este índice, usarla
+  const manual = disposicionManual[indice];
+  const escala = manual ? manual.escala : 0.5;
+  const zIndex = manual ? manual.zIndex : 50;
   
-  const elementosEnFila = config.elementos;
-  const maxAnchoDisponible = window.innerWidth * 0.98;
-  let espacioEntreElementos = Math.min(300, maxAnchoDisponible / (elementosEnFila + 1));
+  // AJUSTE PARA ÁREA EXPANDIDA Y MÁS ALTA
+  // Área expandida horizontalmente y subida verticalmente
+  const rectanguloAncho = window.innerWidth * 0.5;
+  const rectanguloAlto = window.innerHeight * 0.25;
   
-  // Ajustar espaciado según la fila - llenar espacios vacíos
-  if (fila === 0) {
-    // Primera fila: 4 elementos bien distribuidos
-    espacioEntreElementos = Math.max(280, espacioEntreElementos);
-  } else if (fila === 1) {
-    // Segunda fila: 6 elementos ocupando más espacio
-    espacioEntreElementos = Math.max(250, espacioEntreElementos);
-  } else if (fila === 2) {
-    // Tercera fila: 8 elementos llenando los espacios intermedios
-    espacioEntreElementos = Math.min(220, Math.max(180, espacioEntreElementos * 0.85));
-  } else if (fila === 3) {
-    // Cuarta fila: 2 elementos al fondo bien separados
-    espacioEntreElementos = Math.max(400, espacioEntreElementos);
-  }
+  // Centro desplazado hacia la izquierda y centralizado
+  const centroX = window.innerWidth * 0.42;
   
-  // Factor de expansión optimizado para nueva distribución
-  const factorExpansion = fila === 3 ? 1.5 : (fila >= 1 ? 1.2 : 1.3);
-  const espacioFinal = espacioEntreElementos * factorExpansion;
-  const anchoTotalFila = (elementosEnFila - 1) * espacioFinal;
+  // Espaciado expandido dentro del rectángulo
+  const personajesEnFila = totalFilas[fila];
+  const espacioHorizontal = rectanguloAncho / Math.max(personajesEnFila, 1);
   
-  const inicioX = centerX - (anchoTotalFila / 2);
-  const left = inicioX + (posicionEnFila * espacioFinal);
-  const top = centerY + config.offsetY;
+  // Posición horizontal expandida
+  const inicioX = centroX - (rectanguloAncho / 2);
+  const left = inicioX + (posEnFila + 0.5) * espacioHorizontal;
   
-  let finalLeft = left;
+  // Posición vertical - PIRÁMIDE INVERTIDA AÚN MÁS ARRIBA
+  const inicioY = window.innerHeight * 0.02;
+  const espacioVertical = (window.innerHeight * 0.45) / 5;
+  // Invertir el orden: fila 0 abajo (pico), fila 4 arriba (base)
+  const filaInvertida = 4 - fila;
+  const top = inicioY + filaInvertida * espacioVertical;
   
-  // Ajustes especiales por fila
-  if (fila === 0) {
-    // Primera fila: distribución uniforme alrededor del centro
-    const separacionExtra = 50;
-    if (posicionEnFila <= 1) {
-      finalLeft = left - separacionExtra;
-    } else {
-      finalLeft = left + separacionExtra;
-    }
-  } else if (fila === 3) {
-    // Última fila: elementos muy separados
-    const separacionExtra = 200;
-    if (posicionEnFila === 0) {
-      finalLeft = left - separacionExtra;
-    } else {
-      finalLeft = left + separacionExtra;
-    }
-  }
-  
-  // Variación reducida para mejor alineación
-  const variacionX = fila >= 2 ? (Math.random() - 0.5) * 4 : (Math.random() - 0.5) * 6;
-  const variacionY = fila >= 2 ? (Math.random() - 0.5) * 4 : (Math.random() - 0.5) * 6;
-  
-  finalLeft += variacionX;
-  const finalTop = top + variacionY;
-  
-  const leftSeguro = Math.max(120, Math.min(window.innerWidth - 320, finalLeft));
-  const topSeguro = Math.max(20, Math.min(window.innerHeight - 500, finalTop)); // Ajustado para imágenes más arriba
-  
-  posicionesUsadas.push({ 
-    left: leftSeguro, 
-    top: topSeguro, 
-    indice, 
-    fila,
-    zIndex: config.zIndex 
-  });
-  
-  return { 
-    left: leftSeguro, 
-    top: topSeguro, 
-    fila,
-    zIndex: config.zIndex 
-  };
+  return { left, top, fila, zIndex, escala };
 }
 
 // ===== CONFIGURACIÓN DE SCROLL SUAVE =====
@@ -315,174 +193,80 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// ===== SISTEMA DE BOCADILLOS INTERCAMBIABLES =====
-
-// Array para almacenar todos los bocadillos creados
-const bocadillosCreados = [];
-let bocadilloActual = null;
-
-/**
- * Crea un bocadillo de información para un personaje específico
- * @param {number} indicePersonaje - Índice del personaje en personajes
- * @returns {HTMLElement} - Elemento DOM del bocadillo
- */
-function crearBocadillo(indicePersonaje) {
-  const personaje = personajes[indicePersonaje];
-  if (!personaje || !personaje.nombre) {
-    // Si no hay información del personaje, no crear bocadillo
-    return null;
-  }
+// ===== FUNCIÓN PARA CREAR EL PERSONAJE ESPECIAL =====
+function crearPersonajeEspecial() {
+  if (personajeEspecialCreado) return;
   
-  const bocadillo = document.createElement("div");
-  bocadillo.classList.add("info-bocadillo");
-  bocadillo.id = `bocadillo-${indicePersonaje}`;
+  const div = document.createElement("div");
+  div.classList.add("cuadro", "personaje-especial");
+  div.id = personajeEspecial.id;
   
-  // Obtener la posición real de la imagen correspondiente desde el DOM
-  let posicionImagen = { left: centerX, top: centerY };
+  // Aplicar posición y tamaño específicos
+  div.style.left = `${personajeEspecial.posicion.left}px`;
+  div.style.top = `${personajeEspecial.posicion.top}px`;
+  div.style.width = `${personajeEspecial.posicion.width}px`;
+  div.style.height = `${personajeEspecial.posicion.height}px`;
+  div.style.zIndex = "100";
   
-  if (indicePersonaje === 0) {
-    // Imagen principal - buscar elemento con clase 'head'
-    const imagenPrincipal = document.querySelector('.cuadro.head');
-    if (imagenPrincipal) {
-      const rect = imagenPrincipal.getBoundingClientRect();
-      posicionImagen = { 
-        left: rect.left + rect.width / 2, 
-        top: rect.top + rect.height / 2 
-      };
-    }
-  } else {
-    // Buscar la imagen correspondiente en la pirámide
-    const todasLasImagenes = document.querySelectorAll('.cuadro:not(.head)');
-    const imagenObjetivo = todasLasImagenes[indicePersonaje - 1]; // -1 porque empezamos desde índice 1
-    
-    if (imagenObjetivo) {
-      const rect = imagenObjetivo.getBoundingClientRect();
-      posicionImagen = { 
-        left: rect.left + rect.width / 2, 
-        top: rect.top + rect.height / 2 
-      };
-    }
-  }
-  
-  // Usar directamente las coordenadas del bocadillo (ya están optimizadas)
-  let offsetX = personaje.bocadilloX;
-  let offsetY = personaje.bocadilloY;
-  
-  // Ajustar posición final del bocadillo
-  bocadillo.style.left = `${posicionImagen.left + offsetX}px`;
-  bocadillo.style.top = `${posicionImagen.top + offsetY}px`;
-  bocadillo.style.zIndex = "200";
-  
-  // Contenido del bocadillo
-  bocadillo.innerHTML = `
-    <div class="bocadillo-content">
-      <strong>${personaje.nombre}</strong><br>
-      ${personaje.edad}, ${personaje.lugar}
-    </div>
+  // Crear estructura HTML
+  div.innerHTML = `
+    <img src="${encodeURI(personajeEspecial.imagen)}" 
+         alt="${personajeEspecial.nombre}" 
+         loading="lazy"
+         style="width: 100%; height: 100%; object-fit: contain; object-position: center; display: block;">
   `;
   
   // Inicialmente invisible
-  gsap.set(bocadillo, { opacity: 0, scale: 0.8 });
+  gsap.set(div, { opacity: 0, x: 300 });
   
-  return bocadillo;
-}
-
-/**
- * Muestra un bocadillo específico y oculta el actual
- * @param {number} indicePersonaje - Índice del personaje a mostrar
- */
-function mostrarBocadillo(indicePersonaje) {
-  // ELIMINAR TODOS los bocadillos existentes del DOM
-  document.querySelectorAll('.info-bocadillo').forEach(bocadillo => {
-    bocadillo.remove();
-  });
+  piramide.appendChild(div);
+  personajeEspecialCreado = true;
   
-  // Limpiar arrays
-  bocadillosCreados.length = 0;
-  bocadilloActual = null;
-  
-  // Crear SOLO el bocadillo que necesitamos
-  const nuevoBocadillo = crearBocadillo(indicePersonaje);
-  if (nuevoBocadillo) {
-    piramide.appendChild(nuevoBocadillo);
-    bocadilloActual = nuevoBocadillo;
-    
-    // Mostrarlo inmediatamente
-    gsap.to(nuevoBocadillo, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.4,
-      ease: "power2.out"
-    });
-  }
-}
-
-/**
- * Oculta todos los bocadillos
- */
-function ocultarTodosBocadillos() {
-  // ELIMINAR TODOS los bocadillos del DOM
-  document.querySelectorAll('.info-bocadillo').forEach(bocadillo => {
-    bocadillo.remove();
-  });
-  
-  // Limpiar variables
-  bocadillosCreados.length = 0;
-  bocadilloActual = null;
+  return div;
 }
 
 /**
  * Crea una carta individual con imagen y animación
  */
 function crearCuadro(i) {
+  // TODOS los personajes (incluido el 21) siguen la misma lógica de pirámide
   const div = document.createElement("div");
   div.classList.add("cuadro");
-
-  // Carta principal (elemento 1)
-  if (i === 0) {
-    div.classList.add("head");
-    
-    // Crear estructura HTML para imagen principal - SIN efectos de tarjeta
-    div.innerHTML = `
-      <img src="${encodeURI(personajes[i].imagen)}" alt="Persona Principal" loading="eager">
-    `;
-    
-    // Configurar el trigger de scroll para mostrar el primer bocadillo
-    gsap.set(div, { opacity: 0 }); // Inicialmente invisible
-    
-    ScrollTrigger.create({
-      trigger: ".scroll-zone",
-      start: "top top",
-      end: "top+=100 top",
-      onEnter: () => {
-        // Aparición instantánea de golpe del personaje principal
-        gsap.set(div, { opacity: 1 });
-        // Mostrar bocadillo del primer personaje
-        setTimeout(() => mostrarBocadillo(0), 200);
-      },
-      onLeaveBack: () => {
-        // Desaparición instantánea de golpe
-        gsap.set(div, { opacity: 0 });
-        // Ocultar todos los bocadillos al hacer scroll hacia atrás
-        ocultarTodosBocadillos();
-      }
-    });
-    
-    piramide.appendChild(div);
-    return;
+  
+  // Si es el personaje 21, añadir clase especial para protección contra cortina
+  if (i === 20) {
+    div.classList.add("personaje-especial");
   }
 
-  // Cartas de la pirámide (elementos 2-50)
-  const { left, top, fila, zIndex } = encontrarPosicion(i - 1);
-  const escala = Math.max(0.65, 1 - fila * 0.06);
-  const opacidad = Math.max(0.7, 1 - fila * 0.05);
+  // Asignar ID del personaje si existe
+  if (personajes[i] && personajes[i].id) {
+    div.id = personajes[i].id;
+  }
 
-  // Aplicar posición y z-index
-  div.style.left = `${left}px`;
-  div.style.top = `${top}px`;
-  div.style.zIndex = zIndex;
+  // Configuración específica para Personaje-21
+  if (i === 20) {
+    // Posición y tamaño específicos para Personaje-21 (mucho más grande)
+    div.style.left = "1100px";
+    div.style.top = `${(window.innerHeight - 1832) / 2}px`; // Centrado verticalmente
+    div.style.width = "477px";
+    div.style.height = "1832px";
+    div.style.zIndex = "8000";
+    div.style.position = "fixed";
+  } else {
+    // Resto de personajes siguen la disposición grupal fotográfica
+    const { left, top, fila, zIndex, escala } = encontrarPosicion(i);
+    
+    // Aplicar posición y z-index
+    div.style.left = `${left}px`;
+    div.style.top = `${top}px`;
+    div.style.zIndex = zIndex;
+  }
+
+  // Calcular opacidad y escala para todos
+  const { fila, escala } = encontrarPosicion(i);
+  const opacidad = Math.max(0.8, 1 - fila * 0.05);
   
-  // Crear estructura HTML SOLO con imagen - SIN overlay ni efectos de tarjeta
+  // Crear estructura HTML SOLO con imagen
   div.innerHTML = `
     <img src="${encodeURI(personajes[i].imagen || personajes[0].imagen)}" 
          alt="Persona ${i + 1}" 
@@ -491,14 +275,30 @@ function crearCuadro(i) {
          onerror="console.log('Error cargando imagen ${i + 1}'); this.style.display='none'; this.parentElement.style.background='rgba(255,255,255,0.1)'; this.parentElement.innerHTML='<span style=\\'color:white; font-size:12px; text-align:center; display:flex; align-items:center; justify-content:center; height:100%\\'>Imagen ${i + 1}</span>';">
   `;
 
-  // ===== EVENTO DE CLIC ELIMINADO =====
-  // Modal de debug eliminado para mejor experiencia de usuario
-
   // ===== CONFIGURACIÓN DE ANIMACIÓN =====
-  gsap.set(div, { opacity: 0 }); // Solo opacidad, sin escala
+  gsap.set(div, { opacity: 0 });
 
-  // Aumentar el tiempo entre apariciones para efecto más dramático
-  const delayGrupo = i < 4 ? i * 300 : i < 15 ? 1200 + (i - 4) * 200 : 3400 + (i - 15) * 150;
+  // Calcular delay para aparición progresiva por filas (de atrás hacia adelante)
+  let delayGrupo;
+  
+  // El personaje-21 siempre aparece al final de todo
+  if (i === 20) {
+    delayGrupo = 4500; // Aparece después de todos los demás
+  } else if (fila === 0) {
+    // Fila trasera aparece primero
+    delayGrupo = 200 + (i * 150);
+  } else if (fila === 1) {
+    // Fila media-trasera aparece después
+    delayGrupo = 1400 + ((i - 7) * 180);
+  } else if (fila === 2) {
+    // Fila media-frontal 
+    delayGrupo = 2500 + ((i - 13) * 200);
+  } else {
+    // Fila frontal aparece al final
+    delayGrupo = 3500 + ((i - 18) * 250);
+  }
+
+  console.log(`✨ Personaje-${i + 1} aparece (delay: ${delayGrupo}ms, fila: ${fila})`);
 
   ScrollTrigger.create({
     trigger: ".scroll-zone",
@@ -508,35 +308,47 @@ function crearCuadro(i) {
       div.classList.add("mostrar");
       cuadrosVisibles++;
       
-      // Aparición instantánea de golpe
+      // Aparición instantánea
       gsap.set(div, { 
         opacity: opacidad,
         scale: escala
       });
-      
-      // Sistema de bocadillos intercambiables - UNO A LA VEZ
-      if (i >= 1 && i <= 13) {
-        mostrarBocadillo(i);
-      }
     },
     onLeaveBack: () => {
       div.classList.remove("mostrar");
       cuadrosVisibles--;
       
-      // Desaparición instantánea de golpe
+      // Desaparición instantánea
       gsap.set(div, { opacity: 0 });
-      
-      // Al hacer scroll hacia atrás, mostrar el bocadillo anterior
-      if (i >= 1 && i <= 13) {
-        // Si salimos de una imagen, mostrar el bocadillo del personaje anterior
-        const personajeAnterior = Math.max(0, i - 1);
-        mostrarBocadillo(personajeAnterior);
-      }
     }
   });
 
-  piramide.appendChild(div);
+  // Si es el personaje especial, colocarlo en el contenedor retrato-fijo
+  // para aislarlo completamente del efecto cortina
+  if (i === 20) {
+    const retratoFijo = document.querySelector('.retrato-fijo');
+    if (retratoFijo) {
+      retratoFijo.appendChild(div);
+      console.log('🖼️ Personaje-21 colocado en zona protegida (.retrato-fijo)');
+    } else {
+      // Fallback: crear el contenedor si no existe
+      const escenaMultitud = document.querySelector('.escena-multitud');
+      if (escenaMultitud) {
+        const retratoFijoNew = document.createElement('div');
+        retratoFijoNew.className = 'retrato-fijo';
+        escenaMultitud.appendChild(retratoFijoNew);
+        retratoFijoNew.appendChild(div);
+        console.log('🖼️ Personaje-21 colocado en zona protegida (contenedor creado)');
+      } else {
+        piramide.appendChild(div);
+        console.warn('⚠️ No se pudo aislar el personaje-21, colocado en pirámide');
+      }
+    }
+  } else {
+    piramide.appendChild(div);
+  }
 }
+
 // ===== CREACIÓN PROGRESIVA DE ELEMENTOS =====
 let i = 0;
 function crearCuadrosProgresivamente(deadline) {
@@ -549,13 +361,59 @@ function crearCuadrosProgresivamente(deadline) {
   } else {
     console.log("✅ Pirámide completada:");
     console.log("📊 Distribución por filas:");
-    piramideConfig.forEach((config, index) => {
-      console.log(`   Fila ${index + 1}: ${config.elementos} elementos`);
-    });
-    console.log(`📍 Total posiciones: ${posicionesUsadas.length}`);
+    console.log(`   Fila 1: 1 elemento`);
+    console.log(`   Fila 2: 2 elementos`);
+    console.log(`   Fila 3: 5 elementos`);
+    console.log(`   Fila 4: 5 elementos`); 
+    console.log(`   Fila 5: 6 elementos`);
+    console.log(`📍 Total personajes: ${total} (todos en pirámide)`);
+    
+    // Verificar orden correcto
+    verificarOrdenPersonaje21();
   }
 }
 requestIdleCallback(crearCuadrosProgresivamente);
+
+// Función para verificar que el personaje-21 sea realmente el último
+function verificarOrdenPersonaje21() {
+  console.log("🔍 === VERIFICACIÓN ORDEN PERSONAJE-21 ===");
+  
+  let maxDelay = 0;
+  let personajeConMaxDelay = 0;
+  
+  // Calcular todos los delays de personajes 1-21
+  for (let i = 0; i < 21; i++) {
+    const { fila } = encontrarPosicion(i);
+    let delay;
+    
+    // El personaje-21 siempre aparece al final de todo
+    if (i === 20) {
+      delay = 4500; // Aparece después de todos los demás
+    } else if (fila === 0) {
+      delay = 200 + (i * 150);
+    } else if (fila === 1) {
+      delay = 1400 + ((i - 7) * 180);
+    } else if (fila === 2) {
+      delay = 2500 + ((i - 13) * 200);
+    } else {
+      delay = 3500 + ((i - 18) * 250);
+    }
+    
+    if (delay > maxDelay) {
+      maxDelay = delay;
+      personajeConMaxDelay = i + 1;
+    }
+  }
+  
+  console.log(`📊 Personaje con delay más alto: Personaje-${personajeConMaxDelay} (${maxDelay}ms)`);
+  if (personajeConMaxDelay === 21) {
+    console.log(`✅ Personaje-21 configurado como ÚLTIMO en aparecer (${maxDelay}ms)`);
+  } else {
+    console.warn(`⚠️ Personaje-21 NO es el último - revisar configuración`);
+  }
+  console.log(`✅ Todos los personajes configurados correctamente`);
+  console.log("=" .repeat(50));
+}
 
 // ===== MONITOREO DE RENDIMIENTO =====
 let lastTime = performance.now();
@@ -565,9 +423,9 @@ let fps = 0;
 setInterval(() => {
   if (performance.memory) {
     const usedMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
-    monitor.innerHTML = `🧱 Cuadros visibles: ${cuadrosVisibles}<br>🧠 Memoria: ${usedMB} MB<br>🚀 FPS: ${fps}<br>🏗️ Filas piramidales: ${piramideConfig.length}<br>📐 Expansión: ${(window.innerWidth * 0.95).toFixed(0)}px`;
+    monitor.innerHTML = `🧱 Cuadros visibles: ${cuadrosVisibles}<br>🧠 Memoria: ${usedMB} MB<br>🚀 FPS: ${fps}<br>🏗️ Filas piramidales: ${disposicionManual.length}<br>📐 Expansión: ${(window.innerWidth * 0.95).toFixed(0)}px`;
   } else {
-    monitor.innerHTML = `🧱 Cuadros visibles: ${cuadrosVisibles}<br>🧠 Memoria: N/D<br>🚀 FPS: ${fps}<br>🏗️ Filas piramidales: ${piramideConfig.length}<br>📐 Expansión: ${(window.innerWidth * 0.95).toFixed(0)}px`;
+    monitor.innerHTML = `🧱 Cuadros visibles: ${cuadrosVisibles}<br>🧠 Memoria: N/D<br>🚀 FPS: ${fps}<br>🏗️ Filas piramidales: ${disposicionManual.length}<br>📐 Expansión: ${(window.innerWidth * 0.95).toFixed(0)}px`;
   }
 }, 500);
 
@@ -592,19 +450,16 @@ window.mostrarEstructuraPiramide = () => {
   console.log("🏗️ ESTRUCTURA DE LA PIRÁMIDE:");
   console.log("=" .repeat(50));
   
-  let elementoActual = 1;
-  
-  piramideConfig.forEach((config, filaIndex) => {
+  disposicionManual.forEach((config, filaIndex) => {
     const elementos = [];
     for (let i = 0; i < config.elementos; i++) {
-      elementos.push(elementoActual + i);
+      elementos.push(i + 1);
     }
     console.log(`Fila ${filaIndex + 1}: [${elementos.join(', ')}] (${config.elementos} elementos)`);
-    elementoActual += config.elementos;
   });
   
   console.log("=" .repeat(50));
-  console.log(`Total elementos (sin contar head): ${elementoActual - 1}`);
+  console.log(`Total elementos (sin contar head): ${disposicionManual.length}`);
 };
 
 // ===== FUNCIÓN PARA CAMBIAR IMÁGENES DINÁMICAMENTE =====
@@ -639,7 +494,7 @@ setTimeout(() => {
   console.log("✅ Usando imágenes de la carpeta PERSONAJES PRESENTACION");
   console.log(`📁 ${personajes.length} imágenes disponibles`);
   console.log(`🎯 Total elementos configurados: ${total}`);
-  console.log(`📊 Distribución: 1 principal + ${total-1} en pirámide = ${total} total`);
+  console.log(`📊 Distribución: Todos en pirámide = ${total} total`);
   console.log("💡 Para cambiar una imagen específica, ejecuta: cambiarImagen(numero, 'ruta-imagen.jpg')");
   
   // Verificar que las imágenes se puedan cargar
@@ -673,3 +528,128 @@ function verificarImagenes() {
     img.src = rutaCodificada;
   });
 }
+
+// ===== NUEVA SECCIÓN: ESCENA DE MULTITUD =====
+
+/**
+ * Función para generar nombre alt a partir del nombre de archivo
+ * @param {string} rutaImagen - Ruta de la imagen
+ * @returns {string} - Texto alt descriptivo
+ */
+function generarAltText(rutaImagen) {
+  const nombreArchivo = rutaImagen.split('/').pop().split('.')[0];
+  return `Personaje ${nombreArchivo}`;
+}
+
+/**
+ * Inicializar la escena de multitud
+ */
+function inicializarEscenaMultitud() {
+  const multitudContainer = document.querySelector('.multitud');
+  const retratoFijoContainer = document.querySelector('.retrato-fijo');
+  
+  if (!multitudContainer || !retratoFijoContainer) {
+    console.warn('⚠️ Contenedores de multitud no encontrados');
+    return;
+  }
+
+  // Configurar la animación de cortina ascendente
+  configurarAnimacionCortina();
+  
+  console.log(`✅ Escena de personaje especial inicializada: Solo personaje especial visible (sin multitud)`);
+}
+
+/**
+ * Configurar la animación de cortina ascendente con GSAP
+ */
+function configurarAnimacionCortina() {
+  const multitudElement = document.querySelector('.multitud');
+  const espacioBElement = document.querySelector('.espacio-b');
+  
+  if (!multitudElement || !espacioBElement) {
+    console.warn('⚠️ Elementos para animación de cortina no encontrados');
+    return;
+  }
+
+  // Verificar si el usuario prefiere movimiento reducido
+  const prefieereMovimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  if (prefieereMovimientoReducido) {
+    // Versión simplificada sin máscara para accesibilidad
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: espacioBElement,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+                 onUpdate: (self) => {
+           // Aplicar solo cambio de opacidad sin máscara
+           const progress = self.progress;
+           multitudElement.style.opacity = Math.max(0, 1 - progress);
+           
+           // Proteger siempre al personaje especial original (ahora en .retrato-fijo)
+           const personajeEspecialOriginal = document.querySelector('.retrato-fijo .cuadro.personaje-especial');
+           if (personajeEspecialOriginal) {
+             personajeEspecialOriginal.style.opacity = '1';
+             personajeEspecialOriginal.style.filter = 'none';
+             personajeEspecialOriginal.style.mask = 'none';
+             personajeEspecialOriginal.style.webkitMask = 'none';
+           }
+           
+           if (progress > 0.8) {
+             multitudElement.classList.add('reduced-motion');
+           } else {
+             multitudElement.classList.remove('reduced-motion');
+           }
+         }
+      }
+    });
+  } else {
+         // Versión completa con máscara y efectos SOLO para la multitud
+     gsap.timeline({
+       scrollTrigger: {
+         trigger: espacioBElement,
+         start: "top bottom",
+         end: "bottom top",
+         scrub: true,
+         onUpdate: (self) => {
+           const progress = self.progress;
+           console.log(`🎭 Progreso cortina: ${(progress * 100).toFixed(1)}%`);
+           
+           // Asegurar que el personaje especial original NUNCA se vea afectado (ahora en .retrato-fijo)
+           const personajeEspecialOriginal = document.querySelector('.retrato-fijo .cuadro.personaje-especial');
+           if (personajeEspecialOriginal) {
+             personajeEspecialOriginal.style.opacity = '1';
+             personajeEspecialOriginal.style.filter = 'none';
+             personajeEspecialOriginal.style.mask = 'none';
+             personajeEspecialOriginal.style.webkitMask = 'none';
+           }
+         }
+       }
+     })
+     .to(multitudElement, {
+       "--wipe": "100%",
+       opacity: 0,
+       filter: "blur(6px)",
+       ease: "none",
+       duration: 1
+     });
+  }
+
+  console.log(`✅ Animación de cortina configurada (Movimiento reducido: ${prefieereMovimientoReducido})`);
+}
+
+// Inicializar la escena de multitud después de que la pirámide esté completa
+// Esperamos un poco para asegurar que todo esté cargado
+setTimeout(() => {
+  inicializarEscenaMultitud();
+}, 2000);
+
+// Agregar información de debug para la nueva funcionalidad
+setTimeout(() => {
+  console.log("🎭 === ESCENA DE PERSONAJE ESPECIAL ===");
+  console.log(`📊 Imágenes en multitud: ${document.querySelectorAll('.multitud img').length} (vacía por diseño)`);
+  console.log(`🖼️ Personaje especial: ${document.querySelectorAll('.retrato-fijo .cuadro.personaje-especial').length ? 'Aislado en zona protegida (.retrato-fijo)' : 'No encontrado en zona protegida'}`);
+  console.log(`🎬 ScrollTriggers activos: ${ScrollTrigger.getAll().length}`);
+  console.log(`♿ Movimiento reducido: ${window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'SÍ' : 'NO'}`);
+}, 3000);
