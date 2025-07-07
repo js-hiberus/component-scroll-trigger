@@ -1,0 +1,178 @@
+/* ===== TITULO PRINCIPAL RESPONSIVE ===== */
+/* Estilos específicos para el título principal con transiciones perfectas */
+
+.titulo-principal {
+  /* Propiedades base que no cambian */
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.33px;
+  color: #C8C8C8;
+  margin: 0;
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0px);
+  transition: opacity 1s ease-in-out;
+  
+  /* Propiedades responsive con clamp para transición suave */
+  font-size: clamp(36px, 4vw + 1rem, 80px);
+  line-height: clamp(39px, 4vw + 1.2rem, 90px);
+  width: clamp(324px, 45vw, 697px);
+  height: clamp(159px, 25vh, 453px);
+  
+  /* Text-align responsive */
+  text-align: center;
+}
+
+/* ===== BREAKPOINTS ESPECÍFICOS ===== */
+
+/* Móvil: hasta 600px */
+@media (max-width: 600px) {
+  .titulo-principal {
+    font-size: 36px;
+    line-height: 39px;
+    width: 324px;
+    height: 159px;
+    text-align: center;
+    /* Asegurar que esté centrado en móvil */
+    margin: 0 auto;
+  }
+  
+  .texto-progresivo {
+    position: fixed;
+    left: 50%;
+    top: 85%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 90%;
+    margin: 0;
+    z-index: 9000;
+  }
+}
+
+/* Tablet: 601px - 900px */
+@media (min-width: 601px) and (max-width: 900px) {
+  .titulo-principal {
+    /* Valores interpolados entre móvil y desktop */
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: clamp(39px, 5vw + 0.5rem, 70px);
+    width: clamp(324px, 50vw, 500px);
+    height: clamp(159px, 30vh, 300px);
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  .texto-progresivo {
+    position: fixed;
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 80%;
+    margin: 0;
+    z-index: 9000;
+  }
+}
+
+/* Tablet grande: 901px - 1024px */
+@media (min-width: 901px) and (max-width: 1024px) {
+  .titulo-principal {
+    font-size: clamp(50px, 6vw, 70px);
+    line-height: clamp(55px, 6vw + 0.5rem, 80px);
+    width: clamp(400px, 55vw, 600px);
+    height: clamp(200px, 35vh, 400px);
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  .texto-progresivo {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 70%;
+    margin: 0;
+  }
+}
+
+/* Desktop: 1025px en adelante */
+@media (min-width: 1025px) {
+  .titulo-principal {
+    font-size: 80px;
+    line-height: 90px;
+    width: 697px;
+    height: 453px;
+    text-align: left;
+    margin: 0;
+    opacity: 1 !important;
+  }
+  
+  .texto-progresivo {
+    position: absolute;
+    left: 127px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: left;
+    max-width: 697px;
+    margin: 0;
+    z-index: 200;
+  }
+}
+
+/* ===== MEJORAS ADICIONALES ===== */
+
+/* Asegurar que el texto no se deforme en pantallas muy anchas */
+@media (min-width: 1400px) {
+  .titulo-principal {
+    font-size: 80px;
+    line-height: 90px;
+    width: 697px;
+    height: 453px;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .titulo-principal {
+    font-size: 32px;
+    line-height: 36px;
+    width: 280px;
+    height: 140px;
+  }
+}
+
+/* Ajustes para pantallas de altura pequeña */
+@media (max-height: 600px) {
+  .titulo-principal {
+    height: clamp(120px, 20vh, 159px);
+  }
+}
+
+/* Optimización para motion reducido */
+@media (prefers-reduced-motion: reduce) {
+  .titulo-principal {
+    transition: none;
+  }
+}
+
+/* Clase para forzar estado visible */
+.titulo-principal.visible {
+  opacity: 1 !important;
+  filter: blur(0px) !important;
+  transform: translateY(0px) !important;
+}
+
+/* Clase para animación de entrada */
+.titulo-principal.animate-in {
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

@@ -1,0 +1,431 @@
+/* ===== RESET Y CONFIGURACIÓN BASE ===== */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body { 
+  background: #796060; 
+  font-family: sans-serif; 
+  overflow-x: hidden; 
+  color: white; 
+}
+
+html, body { 
+  height: 100%; 
+}
+
+/* ===== ZONA DE SCROLL ===== */
+/* Esta zona invisible de 10000px de altura activa las animaciones al hacer scroll */
+.scroll-zone {
+  height: 10000px;
+}
+
+/* ===== CONTENEDOR PRINCIPAL DE LA PIRÁMIDE ===== */
+/* Contenedor fijo que ocupa toda la pantalla donde aparecen las cartas */
+.piramide-container {
+  position: fixed;
+  top: 0;
+  left: -40px;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* ===== ESTILOS DE LAS CARTAS ===== */
+/* Contenedor base de cada imagen - SIN efectos de cuadrado */
+.cuadro {
+  position: absolute;
+  width: 240px;
+  height: 360px;
+  overflow: hidden;
+  transform: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Estilo para las imágenes dentro de los cuadros */
+.cuadro img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+
+
+/* ===== CARTA PRINCIPAL (SIN EFECTOS DE CUADRADO) ===== */
+/* La carta principal del centro - aparece con animación como los demás */
+.cuadro.head {
+  width: 280px;
+  height: 420px;
+  z-index: 100;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+  pointer-events: auto;
+}
+
+/* Estilo específico para la imagen principal */
+.cuadro.head img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+/* ===== MONITOR DE RENDIMIENTO ===== */
+/* Información en tiempo real (esquina superior derecha) */
+.monitor {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 9000;
+  font-family: monospace;
+}
+
+/* ===== PERSONAJE ESPECIAL (PROTECCIÓN CONTRA CORTINA) ===== */
+/* El personaje especial tiene posición y tamaño específicos (más moderado) */
+.cuadro.personaje-especial {
+  width: 320px;
+  height: 1200px;
+  z-index: 8000;
+  opacity: 0;
+  pointer-events: auto;
+  border: none;
+  background: transparent;
+  position: fixed;
+  left: 1100px;
+}
+
+.cuadro.personaje-especial img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+
+
+/* ===== AJUSTES RESPONSIVOS PARA PERSONAJE ESPECIAL ===== */
+@media (max-width: 1400px) {
+  .cuadro.personaje-especial {
+    left: calc(100vw - 250px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .cuadro.personaje-especial {
+    width: 180px;
+    height: 720px;
+    left: calc(100vw - 170px);
+  }
+}
+
+/* Responsive para tablets medianos */
+@media (max-width: 1024px) and (min-width: 769px) {
+  /* Pirámide escalada para tablets */
+  .piramide-container {
+    transform: scale(1);
+    transform-origin: center top;
+    padding-top: 40px;
+  }
+  
+  /* Personaje especial en tablets */
+  .cuadro.personaje-especial {
+    width: 160px;
+    height: 600px;
+    left: calc(100vw - 150px) !important;
+  }
+  
+  /* Texto ajustado para tablets */
+  .texto-progresivo {
+    left: 30px;
+    max-width: calc(100vw - 220px);
+  }
+  
+  .titulo-principal {
+    font-size: clamp(20px, 3.5vw, 32px);
+  }
+  
+  /* Escena multitud en tablets */
+  .multitud {
+    max-width: 65%;
+    gap: 12px;
+    padding: 25px;
+  }
+  
+  .multitud img {
+    width: 90px;
+    height: 135px;
+  }
+}
+
+/* ===== NUEVA SECCIÓN: ESCENA DE MULTITUD ===== */
+/* Contenedor principal de la escena */
+.escena-multitud {
+  position: relative;
+  z-index: 1;
+}
+
+body .cuadro.personaje-especial {
+  z-index: 8000;
+  position: fixed;
+}
+
+/* Panel pegajoso que se mantiene visible durante el scroll */
+.panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #796060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenedor de la multitud con efecto de máscara */
+.multitud {
+  --wipe: 0%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  max-width: 60%;
+  mask-image: linear-gradient(to top, transparent var(--wipe), #000 calc(var(--wipe) + 15%), #000 100%);
+  -webkit-mask-image: linear-gradient(to top, transparent var(--wipe), #000 calc(var(--wipe) + 15%), #000 100%);
+  transition: filter 0.3s ease;
+}
+
+/* Imágenes individuales dentro de la multitud */
+.multitud img {
+  width: 120px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* Espaciadores para control de scroll */
+.espacio-a {
+  height: 150vh;
+  background: transparent;
+}
+
+.espacio-b {
+  height: 150vh;
+  background: transparent;
+}
+
+/* Accesibilidad: Reducir animaciones si está configurado */
+@media (prefers-reduced-motion: reduce) {
+  .multitud {
+    mask-image: none;
+    -webkit-mask-image: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .multitud.reduced-motion {
+    opacity: 0;
+    filter: none;
+  }
+}
+
+/* Responsive para la escena de multitud */
+@media (max-width: 1200px) {
+  .multitud {
+    max-width: 70%;
+    gap: 15px;
+    padding: 30px;
+  }
+  
+  .multitud img {
+    width: 120px;
+    height: 180px;
+  }
+}
+
+.texto-progresivo {
+  position: absolute;
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  max-width: 450px;
+  text-align: left;
+  pointer-events: none;
+}
+
+.titulo-principal {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 80px;
+  line-height: 90px;
+  letter-spacing: -0.33px;
+  color: #C8C8C8;
+  margin: 0;
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0px);
+  transition: opacity 1s ease-in-out;
+}
+
+/* En Desktop el texto siempre visible */
+@media (min-width: 1025px) {
+  .titulo-principal {
+    opacity: 1 !important;
+  }
+}
+
+.titulo-principal.visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0px);
+}
+
+@media (max-width: 1200px) {
+  .texto-progresivo {
+    left: 60px;
+    max-width: 400px;
+  }
+  
+  .titulo-principal {
+    font-size: clamp(24px, 3.5vw, 40px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titulo-principal {
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+  
+  .titulo-principal.visible {
+    filter: none;
+    transform: none;
+  }
+} 
+
+/* ========== RESPONSIVE PATCH v2 (2025-07-02) ========== */
+
+/* ===========================
+   BREAKPOINT ≤ 600 px (móvil)
+   =========================== */
+@media (max-width: 600px) {
+  /* Ajustar escala de la pirámide */
+  .piramide-container { 
+    scale: 1;
+  }
+
+  /* Cartas responsivas basadas en viewport */
+  .cuadro {
+    width: 240px;
+    height: 360px;
+    transform: none;
+  }
+
+  /* Asegura que el personaje especial (#personaje-21) vaya al final y centrado */
+  .multitud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .multitud .personaje-especial {
+    order: 99;               /* siempre el último */
+    flex-basis: 100%;
+    margin: 0 auto;
+    position: relative !important; /* anula el fixed de desktop */
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+  }
+
+  /* Texto del efecto cortina centrado y debajo de la imagen */
+  .texto-progresivo {
+    position: fixed;
+    left: 50%;
+    top: 85%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 90%;
+    margin: 0;
+    z-index: 9000;
+  }
+  
+  .titulo-principal {
+    font-size: clamp(32px, 6vw, 56px) !important;
+    font-weight: 400;
+    line-height: 1.3;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  /* Monitor reducido */
+  .monitor {
+    right: 6px;
+    top: 6px;
+    font-size: .65rem;
+    padding: .25rem .4rem;
+  }
+}
+
+/* ===========================================
+   BREAKPOINT 601-900 px (tableta en vertical)
+   =========================================== */
+@media (min-width: 601px) and (max-width: 900px) {
+  .piramide-container { 
+    scale: 1;
+  }
+
+  .cuadro {
+    width: 240px;
+    height: 360px;
+    transform: none;
+  }
+
+  .texto-progresivo {
+    position: fixed;
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 80%;
+    margin: 0;
+    z-index: 9000;
+  }
+  
+  .titulo-principal {
+    font-size: clamp(28px, 5vw, 44px) !important;
+    font-weight: 400;
+    line-height: 1.3;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .monitor { font-size: .75rem; }
+}
+
+@media (max-width: 600px) {
+  .cuadro img { height: auto; }
+}

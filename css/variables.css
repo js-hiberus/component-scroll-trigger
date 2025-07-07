@@ -1,0 +1,210 @@
+:root {
+  /* ===== COLORES ===== */
+  --color-primary: #796060;
+  --color-text-primary: #C8C8C8;
+  --color-text-secondary: white;
+  --color-transparent: transparent;
+  
+  /* Colores con opacidad */
+  --color-overlay-dark: rgba(0, 0, 0, 0.4);
+  --color-overlay-light: rgba(255, 255, 255, 0.1);
+  --color-text-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* ===== TIPOGRAFÍA ===== */
+  --font-primary: Roboto, sans-serif;
+  --font-secondary: sans-serif;
+  --font-mono: monospace;
+  
+  /* Pesos de fuente */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  
+  /* Tamaños de fuente */
+  --font-size-xs: 0.65rem;
+  --font-size-sm: 0.75rem;
+  --font-size-base: 12px;
+  --font-size-lg: 80px;
+  --font-size-xl: 90px;
+  
+  /* Tamaños específicos para título principal */
+  --titulo-font-size-mobile: 36px;
+  --titulo-font-size-desktop: 80px;
+  --titulo-line-height-mobile: 39px;
+  --titulo-line-height-desktop: 90px;
+  
+  /* Espaciado de letras */
+  --letter-spacing-tight: -0.33px;
+  --letter-spacing-normal: 0;
+  
+  /* Altura de línea */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.3;
+  --line-height-custom: 90px;
+  
+  /* ===== DIMENSIONES ===== */
+  /* Cuadros */
+  --cuadro-width: 240px;
+  --cuadro-height: 360px;
+  --cuadro-head-width: 280px;
+  --cuadro-head-height: 420px;
+  
+  /* Personaje especial */
+  --personaje-width: 320px;
+  --personaje-height: 1200px;
+  --personaje-width-tablet: 180px;
+  --personaje-height-tablet: 720px;
+  --personaje-width-mobile: 160px;
+  --personaje-height-mobile: 600px;
+  
+  /* Multitud */
+  --multitud-img-width: 120px;
+  --multitud-img-height: 180px;
+  --multitud-img-width-tablet: 90px;
+  --multitud-img-height-tablet: 135px;
+  
+  /* Contenedores */
+  --container-max-width: 60%;
+  --container-max-width-tablet: 70%;
+  --container-max-width-mobile: 90%;
+  
+  /* Alturas especiales */
+  --scroll-zone-height: 10000px;
+  --spacer-height: 150vh;
+  --full-viewport: 100vh;
+  --full-width: 100vw;
+  
+  /* ===== ESPACIADO ===== */
+  --spacing-xs: 6px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-xxl: 40px;
+  --spacing-xxxl: 80px;
+  
+  /* Gaps */
+  --gap-sm: 12px;
+  --gap-md: 15px;
+  --gap-lg: 20px;
+  --gap-xl: 25px;
+  
+  /* ===== CAPAS Z-INDEX ===== */
+  --z-base: 1;
+  --z-cuadro-head: 100;
+  --z-texto: 200;
+  --z-mapa: 300;
+  --z-personaje-especial: 8000;
+  --z-monitor: 9000;
+  --z-texto-mobile: 9000;
+  
+  /* ===== BREAKPOINTS ===== */
+  --breakpoint-mobile: 600px;
+  --breakpoint-tablet-start: 601px;
+  --breakpoint-tablet-end: 900px;
+  --breakpoint-tablet-medium-start: 769px;
+  --breakpoint-tablet-medium-end: 1024px;
+  --breakpoint-desktop-small: 1025px;
+  --breakpoint-desktop-medium: 1200px;
+  --breakpoint-desktop-large: 1400px;
+  
+  /* ===== TRANSICIONES ===== */
+  --transition-fast: 0.3s ease;
+  --transition-smooth: 0.5s ease-in-out;
+  --transition-slow: 1s ease-in-out;
+  --transition-opacity: opacity 1s ease-in-out;
+  --transition-filter: filter 0.3s ease;
+  --transition-all: all 0.3s ease;
+  
+  /* ===== BORDES ===== */
+  --border-radius-sm: 6px;
+  
+  /* ===== SOMBRAS ===== */
+  --text-shadow-base: 2px 2px 4px var(--color-text-shadow);
+  --box-shadow-light: 0 2px 4px var(--color-text-shadow);
+  
+  /* ===== POSICIONAMIENTO ===== */
+  --position-offset-sm: 10px;
+  --position-offset-md: 30px;
+  --position-offset-lg: 60px;
+  --position-offset-xl: 80px;
+  
+  /* Offsets específicos */
+  --piramide-offset-left: -40px;
+  --personaje-left-desktop: 1100px;
+  
+  /* ===== MÁSCARAS Y FILTROS ===== */
+  --mask-wipe-default: 0%;
+  --mask-gradient: linear-gradient(to top, transparent var(--wipe), #000 calc(var(--wipe) + 15%), #000 100%);
+  
+  /* ===== TAMAÑOS RESPONSIVOS ===== */
+  /* Clamp sizes para responsive design */
+  --font-size-responsive-xs: clamp(20px, 3.5vw, 32px);
+  --font-size-responsive-sm: clamp(24px, 3.5vw, 40px);
+  --font-size-responsive-md: clamp(28px, 5vw, 44px);
+  --font-size-responsive-lg: clamp(32px, 6vw, 56px);
+  --font-size-responsive-xl: clamp(28px, 4vw, 48px);
+  
+  /* Max widths responsivos */
+  --max-width-text-mobile: 90%;
+  --max-width-text-tablet: 80%;
+  --max-width-text-desktop: 450px;
+  --max-width-text-tablet-small: 400px;
+  --max-width-container-tablet: calc(100vw - 220px);
+  --max-width-container-desktop: calc(100vw - 250px);
+  --max-width-container-mobile: calc(100vw - 170px);
+  
+  /* Dimensiones específicas para título principal */
+  --titulo-width-mobile: 324px;
+  --titulo-width-desktop: 697px;
+  --titulo-height-mobile: 159px;
+  --titulo-height-desktop: 453px;
+  
+  /* Posicionamiento específico para título principal */
+  --titulo-top-desktop: 1722px;
+  --titulo-left-desktop: 127px;
+  
+  /* Tamaños responsive con clamp para transición suave */
+  --titulo-font-size-responsive: clamp(36px, 5vw + 1rem, 80px);
+  --titulo-line-height-responsive: clamp(39px, 5vw + 1.2rem, 90px);
+  --titulo-width-responsive: clamp(324px, 45vw, 697px);
+  --titulo-height-responsive: clamp(159px, 25vh, 453px);
+  
+  /* ===== MAPA SVG ===== */
+  /* Dimensiones específicas para el mapa SVG */
+  --mapa-width-mobile: 95px;
+  --mapa-width-desktop: 129.66px;
+  --mapa-height-mobile: 73px;
+  --mapa-height-desktop: 100px;
+  
+  /* Posicionamiento específico para el mapa SVG */
+  --mapa-top-mobile: 878px;
+  --mapa-top-desktop: 1501px;
+  --mapa-left-mobile: 130px;
+  --mapa-left-desktop: 140px;
+  
+  /* Tamaños responsive del mapa con clamp para transición suave */
+  --mapa-width-responsive: clamp(95px, 8vw, 129.66px);
+  --mapa-height-responsive: clamp(73px, 6vw, 100px);
+  --mapa-top-responsive: clamp(878px, 45vh, 1501px);
+  --mapa-left-responsive: clamp(130px, 8vw, 140px);
+}
+
+/* ===== VARIABLES PARA TEMA OSCURO (FUTURO) ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #5a4a4a;
+    --color-overlay-dark: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ===== VARIABLES PARA MOTION REDUCIDO ===== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: none;
+    --transition-slow: none;
+    --transition-opacity: none;
+    --transition-filter: none;
+    --transition-all: none;
+  }
+} 

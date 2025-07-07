@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scroll Efecto Cinemático</title>
   
-  <!-- CSS Personalizado -->
-  <link rel="stylesheet" href="styles.css">
+  <!-- CSS Personalizado con Variables -->
+  <link rel="stylesheet" href="css/styles-improved.css">
+  <!-- CSS específico para título responsive -->
+  <link rel="stylesheet" href="css/titulo-responsive.css">
   
   <!-- Librerías externas GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
@@ -25,6 +27,15 @@
     <div class="panel">
       <div class="multitud"></div>
       <div class="retrato-fijo"></div>
+      <!-- Contenedor para el texto progresivo -->
+      <div class="texto-progresivo">
+        <h1 class="titulo-principal">Dónde yace la historia: el mapa de las fosas comunes en España</h1>
+      </div>
+      
+      <!-- Contenedor independiente para el mapa -->
+      <div class="mapa-container">
+        <img src="svg/mapa.svg" alt="Mapa de España con fosas comunes" class="mapa-svg">
+      </div>
     </div>
     <div class="espacio-a"></div> <!-- 150vh -->
     <div class="espacio-b"></div> <!-- 150vh -->
@@ -37,7 +48,14 @@
     🚀 FPS: --
   </div>
 
-  <!-- JavaScript personalizado -->
-  <script src="script.js"></script>
+  <!-- JavaScript personalizado - Arquitectura modular -->
+  <script src="js/config.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/performance.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
