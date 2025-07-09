@@ -27,18 +27,78 @@
     <div class="panel">
       <div class="multitud"></div>
       <div class="retrato-fijo"></div>
-      <!-- Contenedor para el texto progresivo -->
-      <div class="texto-progresivo">
-        <h1 class="titulo-principal">Dónde yace la historia: el mapa de las fosas comunes en España</h1>
-      </div>
       
-      <!-- Contenedor independiente para el mapa -->
-      <div class="mapa-container">
-        <img src="svg/mapa.svg" alt="Mapa de España con fosas comunes" class="mapa-svg">
+      <!-- Flecha móvil para scroll con texto -->
+      <div class="flecha-movil-container">
+        <div class="flecha-movil" id="flecha-movil">
+          <img src="svg/flecha-movil.svg" alt="Deslizar hacia abajo" class="flecha-svg">
+          <span class="flecha-texto">Desliza hacia abajo</span>
+        </div>
+      </div>
+      <!-- Contenedor unificado para título y mapa -->
+      <div class="contenedor-titulo-mapa">
+        <!-- Contenedor para el texto progresivo -->
+        <div class="texto-progresivo">
+          <h1 class="titulo-principal">Dónde yace la historia: el mapa de las fosas comunes en España</h1>
+        </div>
+        <!-- Contenedor independiente para el mapa -->
+        <div class="mapa-container">
+          <img src="svg/mapa.svg" alt="Mapa de España con fosas comunes" class="mapa-svg">
+        </div>
       </div>
     </div>
     <div class="espacio-a"></div> <!-- 150vh -->
     <div class="espacio-b"></div> <!-- 150vh -->
+  </section>
+
+  <!-- Nueva sección: Mapa de las fosas comunes - FUERA del panel sticky -->
+  <section class="seccion-mapa">
+    <div class="contenedor-mapa">
+      <!-- Información del autor -->
+      <div class="info-autor">
+        <p>JOSÉ A. CABERO | DatosRTV | IntegrantesRTV*</p>
+        <p>27.06.2024 | 17:04</p>
+      </div>
+      <!-- Iconos de redes sociales -->
+      <div class="iconos-redes">
+        <a href="#" class="icono-red" aria-label="Facebook">
+          <img src="svg/facebook.svg" alt="Facebook">
+        </a>
+        <a href="#" class="icono-red" aria-label="Twitter">
+          <img src="svg/twitter.svg" alt="Twitter">
+        </a>
+      </div>
+      <!-- Texto descriptivo -->
+      <div class="texto-descriptivo">
+        <p>
+          Dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc et tincidunt lacinia, justo sapien 
+          feugiat tortor, non facilisis ipsum velit sed lacus. Aenean et diam nec lacus efficitur 
+          scelerisque. Nulla facilisi. Vivamus non mi nec nisl cursus laoreet. Curabitur sed mauris id 
+          metus tristique ullamcorper. Ut sit amet feugiat lorem.
+        </p>
+        
+        <p>
+          Duis vitae turpis ut orci porttitor volutpat. Praesent ut magna vitae risus euismod laoreet. 
+          Aliquam erat volutpat. Morbi malesuada, risus sed tincidunt tempor, justo nibh rutrum magna, 
+          sed cursus est magna vel elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices 
+          posuere cubilia sed cursus est magna vel elit.
+        </p>
+      </div>   
+      <!-- Texto adicional -->
+      <div class="texto-adicional">
+        <p>
+          Suspendisse potenti. Pellentesque non sapien sit amet sem aliquet dictum. Lorem ipsum 
+          dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc et tincidunt lacinia, justo 
+          sapien feugiat tortor, non facilisis ipsum velit sed lacus. Aenean et diam nec lacus efficitur 
+          scelerisque. Nulla facilisi. Vivamus non mi nec nisl cursus laoreet. Curabitur sed mauris id 
+          metus tristique ullamcorper. Ut sit amet feugiat lorem. Duis vitae turpis ut orci porttitor 
+          volutpat. Praesent ut magna vitae risus euismod laoreet. Aliquam erat volutpat. Morbi 
+          malesuada, risus sed tincidunt tempor, justo nibh rutrum magna, sed cursus est magna vel 
+          elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia sed 
+          cursus est magna vel elit.
+        </p>
+      </div>
+    </div>
   </section>
 
   <!-- Monitor de rendimiento (esquina superior derecha) -->
